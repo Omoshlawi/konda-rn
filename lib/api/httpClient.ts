@@ -1,11 +1,8 @@
-import { TokenPair, useSessionStore } from "../global-store";
 import axios from "axios";
-import { Platform } from "react-native";
+import { TokenPair, useSessionStore } from "../global-store";
 
 const httpClient = axios.create({
-  baseURL: `http://${
-    Platform.OS === "android" ? "192.168.162.81" : "localhost"
-  }:5000/api`,
+  baseURL: `http://192.168.162.81:5000/api`,
 });
 
 httpClient.interceptors.request.use(
