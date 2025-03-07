@@ -1,8 +1,7 @@
+import { Box, Button } from "@/components";
 import { showModal, showModalBottomSheet } from "@/lib/overlays";
 import React, { PropsWithChildren } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import Box from "./Box";
-import { Button } from "./Button";
 
 type Props = PropsWithChildren<{
   onDelete?: () => void;
