@@ -37,13 +37,11 @@ export default function RootLayout() {
 
   return (
     <ApiConfigProvider>
-      <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
-      </ThemeProvider>
     </ApiConfigProvider>
   );
 }
