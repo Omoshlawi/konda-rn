@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
+import { Text } from "@/components";
 
 const APITest = () => {
   const { data, error, isLoading } = useTodos();
   if (isLoading) return <Text>Loading</Text>;
-  if (error) return <Text>{JSON.stringify(error, null, 2)}</Text>;
+  if (error)
+    return <Text color={"text"}>{JSON.stringify(error, null, 2)}</Text>;
   return (
     <View>
-      <Text style={{ color: "white" }}>{JSON.stringify(data, null, 2)}</Text>
+      <Text color={"text"}>{JSON.stringify(data, null, 2)}</Text>
     </View>
   );
 };
