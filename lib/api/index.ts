@@ -7,3 +7,4 @@ export { default as mutate } from "./mutate";
 export * from "./constructUrl";
 export * from "./objectToFormData";
 export * from "./delay";
+export * from "./types"
