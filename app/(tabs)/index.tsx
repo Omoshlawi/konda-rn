@@ -3,15 +3,50 @@ import { Image, StyleSheet, Platform } from "react-native";
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import APITest from "@/lib/api/APITest";
-import ThemeTest from "@/components/ThemeTest";
-import { ThemedPageLayout } from "@/components";
+import {
+  Button,
+  ExpansionTile,
+  ExpoIconComponent,
+  IconButton,
+  InputSkeleton,
+  ListTile,
+  ListTileSkeleton,
+  SectionCard,
+  Text,
+  TextInput,
+  ThemedPageLayout,
+} from "@/components";
 
 export default function HomeScreen() {
   return (
     <ThemedPageLayout>
       <HelloWave />
       <APITest />
-      <ThemeTest />
+      <Button title="Btn tertiary" variant="tertiary" />
+      <SectionCard title="Section">
+        <ListTile
+          leading={<ExpoIconComponent family="FontAwesome" name="star" />}
+          title="Listtile"
+          subtitle="Some subtitle for the list tile goes here no matter the length"
+          borderBottom
+        />
+      </SectionCard>
+      <ExpansionTile
+        title="Expansion Tile"
+        subtitle="Some subtitle for the expansion tile goes hre as well"
+      >
+        <Text color={"text"}>
+          Some text here representing expansion tile childrem
+        </Text>
+      </ExpansionTile>
+      <TextInput
+        label="Label"
+        placeholder="Placeholder"
+        prefixIcon={<ExpoIconComponent family="FontAwesome" name="star" />}
+      />
+      <InputSkeleton />
+      <ListTileSkeleton />
+      <IconButton icon={{ family: "FontAwesome", name: "star" }} />
     </ThemedPageLayout>
   );
 }
