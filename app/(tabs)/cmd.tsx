@@ -9,6 +9,7 @@ import {
   TabView,
   ThemedPageLayout,
 } from "@/components";
+import { Link } from "expo-router";
 
 const Command = () => {
   return (

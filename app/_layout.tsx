@@ -9,6 +9,7 @@ import { ApiConfigProvider } from "@/lib/api";
 import { useUserPreferenceStore } from "@/lib/global-store";
 import { ThemeProvider } from "@/lib/theme";
 import { OverlayPortal } from "@/lib/overlays";
+import { useLoadInitialAuthState } from "@/features/auth";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -18,14 +19,15 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
   const theme = useUserPreferenceStore((state) => state.userPreferences.theme); // Contains also system
+  const { isLoading } = useLoadInitialAuthState();
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && !isLoading) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, isLoading]);
 
-  if (!loaded) {
+  if (!loaded || isLoading) {
     return null;
   }
 
@@ -33,8 +35,9 @@ export default function RootLayout() {
     <ThemeProvider>
       <ApiConfigProvider>
         <OverlayPortal>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(authentication)" />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style={theme == "dark" ? "light" : "dark"} />
