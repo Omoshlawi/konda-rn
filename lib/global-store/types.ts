@@ -46,3 +46,14 @@ export interface User {
     theme: ThemeName;
   };
   
+  export type Overlay = {
+    id: string;
+    component?: React.ReactElement;
+    type: "snackbar" | "modal";
+    modalOptions?: {
+      transparent?: boolean;
+      dismissable?: boolean;
+      animation?: "none" | "slide" | "fade";
+    };
+  };
+  
