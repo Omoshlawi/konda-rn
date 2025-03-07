@@ -5,7 +5,6 @@ export type SessionStore = {
   session: Session;
   setSession: (session: Session) => void;
   setSessionUser: (user: User) => void;
-  setSessionOrganization: (organization: string) => void;
   setSessionToken: (token: TokenPair, cacheToken?: () => void) => void;
   clearSession: (clearCache?: () => void) => void;
   clearCache?: () => void;
@@ -16,7 +15,7 @@ export type SessionStore = {
 };
 
 export const useSessionStore = create<SessionStore>((set) => ({
-  session: { isAuthenticated: false }, // Initial state
+  session: { isAuthenticated: false, isGuestUser: false }, // Initial state
   /**
    * Updates the entire session object.
    */
@@ -26,16 +25,6 @@ export const useSessionStore = create<SessionStore>((set) => ({
    */
   setSessionUser: (user: User) =>
     set((state) => ({ ...state, session: { ...state.session, user: user } })),
-  /**
-   * updates organization i session object
-   * @param organization
-   * @returns
-   */
-  setSessionOrganization: (organization: string) =>
-    set((state) => ({
-      ...state,
-      session: { ...state.session, currentOrganization: organization },
-    })),
   /**
    * Updates the token object within the session and optionally triggers caching logic.
    */
@@ -54,7 +43,7 @@ export const useSessionStore = create<SessionStore>((set) => ({
         user: undefined,
         token: undefined,
         refreshToken: undefined,
-        currentOrganization: undefined,
+        isGuestUser: false,
       },
     }));
     clearCash?.();

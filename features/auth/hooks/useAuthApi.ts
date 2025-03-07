@@ -38,7 +38,6 @@ const registerUser = async (data: RegisterFormData) => {
       isAuthenticated: true,
       token: responseData.token,
       user: responseData.user,
-      
     },
   }));
   return responseData;
@@ -68,7 +67,7 @@ const logoutUser = () => {
       isAuthenticated: false,
       token: undefined,
       user: undefined,
-      currentOrganization: undefined,
+      isGuestUser: false,
     },
   }));
 };

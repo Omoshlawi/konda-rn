@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { RoutePaths } from "../utils";
+import { ContinueAsGuestUserButton } from "../widgets";
 
 const WelcomeScreen = () => {
   const router = useRouter();
@@ -38,11 +39,7 @@ const WelcomeScreen = () => {
                 variant="tertiary"
                 onPress={() => router.navigate(RoutePaths.REGISTER_SCREEN)}
               />
-              <Button
-                title="Continue as guest user"
-                variant="secondary"
-                onPress={() => router.navigate("/")}
-              />
+              <ContinueAsGuestUserButton />
             </Box>
           </Box>
         </ScrollView>

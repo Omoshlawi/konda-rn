@@ -37,8 +37,7 @@ const useLoadInitialAuthState = () => {
               isAuthenticated: true,
               user,
               token: token,
-              currentOrganization: decodeJWTtoken(token.accessToken)
-                ?.organizationId,
+              isGuestUser: false,
             },
           });
         })
