@@ -59,30 +59,32 @@ const Shell = () => {
       )}
 
       {connected && (
-        <ScrollView style={{ flex: 1 }}>
-          <Text color={"text"} style={{ fontWeight: "bold" }}>
-            Message
-          </Text>
-          {messages.map((message, index) => (
-            <Text color={"text"} key={index}>
-              {message}
+        <>
+          <ScrollView style={{ flex: 1 }}>
+            <Text color={"text"} style={{ fontWeight: "bold" }}>
+              Message
             </Text>
-          ))}
-        </ScrollView>
+            {messages.map((message, index) => (
+              <Text color={"text"} key={index}>
+                {message}
+              </Text>
+            ))}
+          </ScrollView>
+          <Box flexDirection={"row"} gap={"m"} alignItems={"center"}>
+            <Box flex={1} alignItems={"center"}>
+              <TextInput
+                placeholder="Enter command ..."
+                value={cmd}
+                onChangeText={setCmd}
+              />
+            </Box>
+            <IconButton
+              icon={{ family: "FontAwesome", name: "send" }}
+              onPress={handleSendCommand}
+            />
+          </Box>
+        </>
       )}
-      <Box flexDirection={"row"} gap={"m"} alignItems={"center"}>
-        <Box flex={1} alignItems={"center"}>
-          <TextInput
-            placeholder="Enter command ..."
-            value={cmd}
-            onChangeText={setCmd}
-          />
-        </Box>
-        <IconButton
-          icon={{ family: "FontAwesome", name: "send" }}
-          onPress={handleSendCommand}
-        />
-      </Box>
     </Box>
   );
 };
