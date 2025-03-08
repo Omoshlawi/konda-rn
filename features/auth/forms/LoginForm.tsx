@@ -1,9 +1,4 @@
-import {
-  Button,
-  ExpoIconComponent,
-  TextInput,
-  Box
-} from "@/components";
+import { Button, ExpoIconComponent, TextInput, Box } from "@/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -92,7 +87,11 @@ const LoginForm = () => {
           />
         )}
       />
-      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+      <Button
+        title="Submit"
+        onPress={form.handleSubmit(onSubmit)}
+        loading={form.formState.isSubmitting}
+      />
     </Box>
   );
 };

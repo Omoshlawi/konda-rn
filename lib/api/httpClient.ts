@@ -2,7 +2,8 @@ import axios from "axios";
 import { TokenPair, useSessionStore } from "../global-store";
 
 const httpClient = axios.create({
-  baseURL: `http://192.168.162.81:5000/api`,
+  baseURL: `https://konda.onrender.com/api`,
+  // baseURL: `http://192.168.162.81:5000/api`,
 });
 
 httpClient.interceptors.request.use(

@@ -1,8 +1,4 @@
-import {
-  ExpoIconComponent,
-  Button,
-  TextInput,
-} from "@/components";
+import { ExpoIconComponent, Button, TextInput } from "@/components";
 import { Box } from "@/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
@@ -160,7 +156,11 @@ const RegisterForm = () => {
           />
         )}
       />
-      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+      <Button
+        title="Submit"
+        onPress={form.handleSubmit(onSubmit)}
+        loading={form.formState.isSubmitting}
+      />
     </Box>
   );
 };

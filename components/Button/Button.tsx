@@ -2,6 +2,7 @@ import { Theme, useTheme } from "@/lib/theme";
 import Color from "color";
 import React, { FC, useMemo } from "react";
 import {
+  ActivityIndicator,
   StyleProp,
   StyleSheet,
   TextStyle,
@@ -19,6 +20,7 @@ interface StyledButtonProps {
   iconLeading?: boolean;
   style?: StyleProp<ViewStyle>;
   labelStyle?: StyleProp<TextStyle>;
+  loading?: boolean;
 }
 
 const Button: FC<StyledButtonProps> = ({
@@ -30,6 +32,7 @@ const Button: FC<StyledButtonProps> = ({
   iconLeading = true,
   labelStyle,
   style,
+  loading = false,
 }) => {
   const theme = useTheme();
   const colors = useMemo(() => {
@@ -61,6 +64,7 @@ const Button: FC<StyledButtonProps> = ({
   return (
     <TouchableHighlight
       onPress={onPress}
+      disabled={loading}
       style={[
         styles.btn,
         {
@@ -78,18 +82,22 @@ const Button: FC<StyledButtonProps> = ({
       ]}
       underlayColor={colors.underlayColor}
     >
-      <>
-        {typeof renderIcon === "function" &&
-          renderIcon({ color: colors.color, size: 18 })}
-        <Text
-          textAlign={"center"}
-          style={[{ color: colors.color }, labelStyle]}
-          fontWeight={"700"}
-          variant={"bodyLarge"}
-        >
-          {title}
-        </Text>
-      </>
+      {loading ? (
+        <ActivityIndicator color={colors.color} />
+      ) : (
+        <>
+          {typeof renderIcon === "function" &&
+            renderIcon({ color: colors.color, size: 18 })}
+          <Text
+            textAlign={"center"}
+            style={[{ color: colors.color }, labelStyle]}
+            fontWeight={"700"}
+            variant={"bodyLarge"}
+          >
+            {title}
+          </Text>
+        </>
+      )}
     </TouchableHighlight>
   );
 };
