@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 import { SettingsScreen } from "@/features/settings";
+import React from "react";
+import { StyleSheet } from "react-native";
 
 const Settings = () => {
   return <SettingsScreen />;

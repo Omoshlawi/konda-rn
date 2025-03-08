@@ -1,21 +1,8 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { StyleSheet } from "react-native";
 
+import { ThemedPageLayout } from "@/components";
 import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import APITest from "@/lib/api/APITest";
-import {
-  Button,
-  ExpansionTile,
-  ExpoIconComponent,
-  IconButton,
-  InputSkeleton,
-  ListTile,
-  ListTileSkeleton,
-  SectionCard,
-  Text,
-  TextInput,
-  ThemedPageLayout,
-} from "@/components";
 
 export default function HomeScreen() {
   return (

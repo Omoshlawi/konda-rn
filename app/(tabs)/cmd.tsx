@@ -1,32 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { CommandAndControlScreen } from "@/features/cnc/screens";
 import React from "react";
-import {
-  Box,
-  Dropdown,
-  EmptyState,
-  ErrorState,
-  ImageViewer,
-  Logo,
-  TabView,
-  ThemedPageLayout,
-} from "@/components";
-import { Link } from "expo-router";
+import { StyleSheet } from "react-native";
 
 const Command = () => {
-  return (
-    <ThemedPageLayout>
-      <Box flex={1} p={"m"}>
-        <Dropdown.Select
-          data={[{ label: "One", value: "1" }]}
-          labelAccessorKey="label"
-          valueAccessorKey="value"
-          label="Devices to send command to"
-          helperText="help text"
-          searchable
-        />
-      </Box>
-    </ThemedPageLayout>
-  );
+  return <CommandAndControlScreen />;
 };
 
 export default Command;

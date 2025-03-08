@@ -33,7 +33,7 @@ export const ThemedPageLayout: FC<Props> = ({
       )}
       {!withSafeArea && children}
       <Switch
-        style={{ position: "absolute", bottom: 40, right: 40 }}
+        style={{ position: "absolute", left: 2, bottom: 0 }}
         value={theme === "dark"}
         onValueChange={(enabled) => setTheme(enabled ? "dark" : "light")}
       />

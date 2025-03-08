@@ -9,9 +9,9 @@ import {
   ThemedPageLayout,
 } from "@/components";
 
-import { LogoutSection } from "@/features/auth";
 import { useSession } from "@/lib/global-store";
 import { ThemeTogglerSection } from "../widgets";
+import { LogoutSection } from "@/features/auth/widgets";
 
 export const SettingsScreen = () => {
   const { user } = useSession();

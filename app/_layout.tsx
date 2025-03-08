@@ -5,11 +5,11 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
+import { useLoadInitialAuthState } from "@/features/auth/hooks";
 import { ApiConfigProvider } from "@/lib/api";
 import { useUserPreferenceStore } from "@/lib/global-store";
-import { ThemeProvider } from "@/lib/theme";
 import { OverlayPortal } from "@/lib/overlays";
-import { useLoadInitialAuthState } from "@/features/auth";
+import { ThemeProvider } from "@/lib/theme";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

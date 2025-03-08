@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { OpenRoute } from "@/features/auth/authorization";
+import { WelcomeScreen } from "@/features/auth/screens";
 import React from "react";
-import { OpenRoute, WelcomeScreen } from "@/features/auth";
+import { StyleSheet } from "react-native";
 
 const Index = () => {
   return (

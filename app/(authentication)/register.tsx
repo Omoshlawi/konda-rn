@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { RegistrationScreen } from "@/features/auth";
+import { RegistrationScreen } from "@/features/auth/screens";
 
 const Resgister = () => {
   return <RegistrationScreen />;
