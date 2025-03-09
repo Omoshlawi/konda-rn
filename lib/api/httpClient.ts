@@ -4,7 +4,6 @@ import { BASE_URL, restBaseUrl } from "@/constants";
 
 const httpClient = axios.create({
   baseURL: `${BASE_URL}${restBaseUrl}`,
-  // baseURL: `http://192.168.162.81:5000/api`,
 });
 
 httpClient.interceptors.request.use(

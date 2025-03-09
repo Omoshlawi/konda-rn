@@ -4,6 +4,7 @@ import { Box, TextInput, Text, IconButton } from "@/components";
 import { io, Socket } from "socket.io-client";
 import { BASE_URL, websocketBaseUrl } from "@/constants";
 import { useTheme } from "@/lib/theme";
+import { showSnackbar } from "@/lib/overlays";
 
 const Shell = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -23,7 +24,7 @@ const Shell = () => {
     socketInstance.io.on("open", () => setConnected(true));
     socketInstance.io.on("close", () => setConnected(false));
 
-    socketInstance.on("cmd:send", (data) => {
+    socketInstance.on("cmd", (data) => {
       setMessages((state) => [...state, data]);
     });
     socketInstance.on("new_connection", (data) => {
@@ -42,8 +43,19 @@ const Shell = () => {
   // Implement handleSendCommand
   const handleSendCommand = () => {
     if (socket && cmd) {
-      socket.emit("cmd:send", cmd);
+      socket.emit("cmd", cmd);
       setCmd(""); // Clear input after sending
+      showSnackbar({
+        kind: "success",
+        title: "Success",
+        subtitle: `Command ${cmd} sent succesfully`,
+      });
+    } else {
+      showSnackbar({
+        kind: "error",
+        title: "error",
+        subtitle: `Command did not send`,
+      });
     }
   };
 
@@ -62,7 +74,7 @@ const Shell = () => {
         <>
           <ScrollView style={{ flex: 1 }}>
             <Text color={"text"} style={{ fontWeight: "bold" }}>
-              Message
+              Connections established
             </Text>
             {messages.map((message, index) => (
               <Text color={"text"} key={index}>
