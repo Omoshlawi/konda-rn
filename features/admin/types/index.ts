@@ -52,6 +52,40 @@ export interface SubCounty {
   updatedAt: string;
 }
 
+export interface Route {
+  id: string;
+  name: string;
+  startPoint: string;
+  endPoint: string;
+  distanceKm: number;
+  estimatedTimeMin: number;
+  createdAt: string;
+  updatedAt: string;
+  voided: boolean;
+}
+
+export interface Operator {
+  id: string;
+  name: string;
+  contact: string;
+  createdAt: string;
+  updatedAt: string;
+  voided: boolean;
+}
+
+export interface Fleet {
+  id: string;
+  name: string;
+  vehicleType: string;
+  capacity: number;
+  plateNumber: string;
+  operatorId: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  voided: boolean;
+}
+
 export type StageFormData = z.infer<typeof StagesShema>;
 export type RouteFormData = z.infer<typeof RouteSchema>;
 export type OperatorFormData = z.infer<typeof OperatorSchema>;
