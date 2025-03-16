@@ -36,7 +36,7 @@ export default function RootLayout() {
       <ApiConfigProvider>
         <OverlayPortal>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(drawer)" />
             <Stack.Screen name="(authentication)" />
             <Stack.Screen name="+not-found" />
           </Stack>

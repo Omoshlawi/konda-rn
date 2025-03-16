@@ -17,23 +17,10 @@ export default function TabLayout() {
         },
       }}
     >
-      {/* <Tabs.Screen
-          name="dashboard"
-          options={{
-            href: currentOrganization ? "/(tabs)/dashboard" : null,
-            title: "Menu",
-            tabBarIcon: ({ color, focused }) => (
-              <StyledTabBarIcon
-                name={focused ? "view-dashboard" : "view-dashboard-outline"}
-                color={color}
-              />
-            ),
-          }}
-        /> */}
       <Tabs.Screen
         name="home"
         options={{
-          href: "/(tabs)/home",
+          href: "/home",
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
             <ExpoIconComponent
@@ -48,7 +35,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cmd"
         options={{
-          href: "/(tabs)/cmd",
+          href: "/cmd",
           title: "CMD",
           tabBarIcon: ({ color, focused }) => (
             <ExpoIconComponent
@@ -61,36 +48,11 @@ export default function TabLayout() {
         }}
       />
 
-      {/* <Tabs.Screen
-        name="pay"
-        options={{
-          href: null,
-          title: "Pay",
-          tabBarIcon: ({ color, focused }) => (
-            <StyledTabBarIcon
-              name={focused ? "plus-circle" : "plus-circle-outline"}
-              color={color}
-            />
-          ),
-        }}
-      /> */}
-      {/* <Tabs.Screen
-        name="support"
-        options={{
-          href: null,
-          title: "Support",
-          tabBarIcon: ({ color, focused }) => (
-            <StyledTabBarIcon
-              name={focused ? "chat" : "chat-outline"}
-              color={color}
-            />
-          ),
-        }}
-      /> */}
       <Tabs.Screen
         name="settings"
         options={{
           title: "Settings",
+          href: "/settings",
           tabBarIcon: ({ color, focused }) => (
             <ExpoIconComponent
               family="Ionicons"
