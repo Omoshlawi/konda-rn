@@ -16,3 +16,4 @@ export { default as ImageViewer } from "./ImageViewer";
 export { default as Logo } from "./Logo";
 export { default as TabView } from "./TabView";
 export * from "./SelectionInput";
+export * from "./SwipableAction";

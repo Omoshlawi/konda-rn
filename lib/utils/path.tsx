@@ -67,3 +67,9 @@ type TuplePaths = Path<TupleExample>;
 type ArrayExample = { users: { name: string }[] };
 
 type ArrayPaths = Path<ArrayExample>;
+
+export const sleep = (milliseconds: number) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+};

@@ -1,1 +1,2 @@
-export * from "./useStages"
+export * from "./useStages";
+export * from "./useAddresses";

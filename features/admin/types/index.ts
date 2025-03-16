@@ -27,8 +27,8 @@ export interface Stage {
   createdAt: string;
   updatedAt: string;
   voided: boolean;
-  county: County;
-  subCounty: SubCounty;
+  county?: County;
+  subCounty?: SubCounty;
 }
 
 export interface County {
@@ -39,6 +39,7 @@ export interface County {
   voided: boolean;
   createdAt: string;
   updatedAt: string;
+  subCounties?: Array<SubCounty>;
 }
 
 export interface SubCounty {

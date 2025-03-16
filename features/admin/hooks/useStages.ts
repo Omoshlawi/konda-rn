@@ -2,7 +2,7 @@ import { apiFetch, APIFetchResponse, constructUrl, useApi } from "@/lib/api";
 import { Stage, StageFormData } from "../types";
 
 export const useStages = () => {
-  const url = constructUrl(`/stage`);
+  const url = constructUrl(`/stage`, { v: "custom:include(county,subCounty)" });
   const { data, error, mutate, isLoading } =
     useApi<APIFetchResponse<{ results: Array<Stage> }>>(url);
   return {

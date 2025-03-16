@@ -1,7 +1,7 @@
 import { MenuItem } from "../types";
 
 export const RoutePaths = Object.freeze({
-  STAGES_LIST_SCREEN: "/(drawer)/admin/stages",
+  STAGES_LIST_SCREEN: "/admin/stages",
 });
 export const menuItems: MenuItem[] = [
   {
@@ -11,4 +11,3 @@ export const menuItems: MenuItem[] = [
     color: "#38b6ff",
   },
 ];
-
