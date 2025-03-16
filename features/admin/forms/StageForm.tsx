@@ -16,7 +16,7 @@ type Props = {
 
 const StageForm: FC<Props> = ({ onSuccess, stage }) => {
   const { createStage, updateStage } = useStagesApi();
-  const { address, error, isLoading } = useAddresses();
+  const { address } = useAddresses();
   const form = useForm<StageFormData>({
     defaultValues: {
       countyCode: stage?.countyCode ?? "",

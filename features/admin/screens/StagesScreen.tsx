@@ -3,23 +3,22 @@ import {
   Box,
   EmptyState,
   ErrorState,
-  ExpoIconComponent,
   ExpansionTile,
+  ExpoIconComponent,
   ListTileSkeleton,
+  SwipableAction,
+  Text,
   ThemedPageLayout,
   When,
-  Text,
-  SwipableAction,
-  SwipableActionButton,
 } from "@/components";
-import React, { useMemo, useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { useStages, useStagesApi } from "../hooks";
-import { ConfirmDialog, showDialog, showModal } from "@/lib/overlays";
-import { StageForm } from "../forms";
-import { useTheme } from "@/lib/theme";
-import { Stage } from "../types";
 import { mutate } from "@/lib/api";
+import { ConfirmDialog, showDialog, showModal } from "@/lib/overlays";
+import { useTheme } from "@/lib/theme";
+import React, { useState } from "react";
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { StageForm } from "../forms";
+import { useStages, useStagesApi } from "../hooks";
+import { Stage } from "../types";
 
 const StagesScreen = () => {
   const theme = useTheme();

@@ -6,7 +6,7 @@ export const useFleet = () => {
   const { data, error, mutate, isLoading } =
     useApi<APIFetchResponse<{ results: Array<Fleet> }>>(url);
   return {
-    fleet: data?.data?.results ?? [],
+    fleets: data?.data?.results ?? [],
     isLoading,
     error,
     mutate,

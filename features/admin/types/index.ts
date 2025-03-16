@@ -76,11 +76,11 @@ export interface Operator {
 export interface Fleet {
   id: string;
   name: string;
-  vehicleType: string;
+  vehicleType: "Bus" | "Matatu" | "Shuttle";
   capacity: number;
   plateNumber: string;
   operatorId: string;
-  status: string;
+  status: "Active" | "Inactive" | "Maintenance";
   createdAt: string;
   updatedAt: string;
   voided: boolean;

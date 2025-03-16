@@ -10,7 +10,10 @@ export const FleetSchema = z.object({
   name: z.string().min(1, "Required"),
   vehicleType: z.enum(["Bus", "Matatu", "Shuttle"]),
   capacity: z.number({ coerce: true }),
-  plateNumber: z.string().regex(PLATE_NUMBER_REGEX).min(1, "Required"),
+  plateNumber: z
+    .string()
+    .regex(PLATE_NUMBER_REGEX, "Must be a valid plate number e.g. KDJ 000K")
+    .min(1, "Required"),
   operatorId: z.string().min(1, "Required").uuid(),
   status: z.enum(["Active", "Inactive", "Maintenance"]),
 });

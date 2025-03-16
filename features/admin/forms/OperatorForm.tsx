@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useMemo } from "react";
-import { Operator, OperatorFormData } from "../types";
-import { useAddresses, useOperatorsApi } from "../hooks";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { OperatorSchema } from "../utils/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, TextInput } from "@/components";
 import { handleApiErrors, mutate } from "@/lib/api";
 import { showSnackbar } from "@/lib/overlays";
-import { Box, Button, Dropdown, TextInput, Text } from "@/components";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { FC } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ScrollView } from "react-native";
+import { useOperatorsApi } from "../hooks";
+import { Operator, OperatorFormData } from "../types";
+import { OperatorSchema } from "../utils/validation";
 
 type Props = {
   operator?: Operator;
