@@ -31,6 +31,16 @@ const StagesScreen = () => {
         labelColor: "white",
         accessibilityLabel: "delete stage",
         isLoading: false,
+        iconPosition: "bottom",
+
+        icon: (
+          <ExpoIconComponent
+            family="FontAwesome"
+            name="trash"
+            size={18}
+            color="white"
+          />
+        ),
       },
       {
         label: "Edit",
@@ -39,6 +49,15 @@ const StagesScreen = () => {
         labelColor: "white",
         accessibilityLabel: "edit stage",
         isLoading: true,
+        iconPosition: "bottom",
+        icon: (
+          <ExpoIconComponent
+            family="Feather"
+            name="edit"
+            size={18}
+            color="white"
+          />
+        ),
       },
     ],
     [theme]
