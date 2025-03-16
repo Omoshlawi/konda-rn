@@ -11,3 +11,4 @@ export const menuItems: MenuItem[] = [
     color: "#38b6ff",
   },
 ];
+

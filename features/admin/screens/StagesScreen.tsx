@@ -1,9 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { ThemedPageLayout } from "@/components";
+import { AppBar, ThemedPageLayout } from "@/components";
 
 const StagesScreen = () => {
-  return <ThemedPageLayout></ThemedPageLayout>;
+  return (
+    <ThemedPageLayout>
+      <AppBar title="Stages" />
+    </ThemedPageLayout>
+  );
 };
 
 export default StagesScreen;
