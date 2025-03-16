@@ -17,7 +17,13 @@ const ConfirmDialog: FC<Props> = ({ message, title, onCancel, onConfirm }) => {
       </Text>
       <Text color={"text"}>{message}</Text>
 
-      <Box flexDirection={"row"} gap={"m"} justifyContent={"center"} pt={"m"}>
+      <Box
+        flexDirection={"row"}
+        gap={"m"}
+        justifyContent={"center"}
+        pt={"m"}
+        alignContent={"center"}
+      >
         <TouchableOpacity onPress={onCancel} style={styles.flex}>
           <Text color={"error"} fontWeight="700" textAlign={"center"}>
             Cancel
@@ -38,5 +44,7 @@ export default ConfirmDialog;
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -14,62 +14,48 @@ import {
 } from "@/components";
 import React, { useMemo, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { useStages } from "../hooks";
-import { showModal } from "@/lib/overlays";
+import { useStages, useStagesApi } from "../hooks";
+import { ConfirmDialog, showDialog, showModal } from "@/lib/overlays";
 import StageForm from "../forms/StageForm";
 import { useTheme } from "@/lib/theme";
+import { Stage } from "../types";
+import { mutate } from "@/lib/api";
 
 const StagesScreen = () => {
   const theme = useTheme();
   const stagesAsync = useStages();
-  const actions = useMemo<SwipableActionButton[]>(
-    () => [
-      {
-        label: "Delete",
-        onPress: () => console.log("Pressed one"),
-        backgroundColor: theme.colors.error,
-        labelColor: "white",
-        accessibilityLabel: "delete stage",
-        isLoading: false,
-        iconPosition: "bottom",
-
-        icon: (
-          <ExpoIconComponent
-            family="FontAwesome"
-            name="trash"
-            size={18}
-            color="white"
-          />
-        ),
-      },
-      {
-        label: "Edit",
-        onPress: () => console.log("Pressed two"),
-        backgroundColor: theme.colors.secondary,
-        labelColor: "white",
-        accessibilityLabel: "edit stage",
-        isLoading: true,
-        iconPosition: "bottom",
-        icon: (
-          <ExpoIconComponent
-            family="Feather"
-            name="edit"
-            size={18}
-            color="white"
-          />
-        ),
-      },
-    ],
-    [theme]
-  );
-  const handleaddStage = () => {
+  const [loading, setLoading] = useState(false);
+  const { deleteStage } = useStagesApi();
+  const handleaddOrEditStage = (stage?: Stage) => {
     const dispose = showModal(
       <StageForm
         onSuccess={() => {
           dispose();
         }}
+        stage={stage}
       />,
       { title: "Add stage" }
+    );
+  };
+
+  const handleDelete = (stage: Stage) => {
+    const dispose = showDialog(
+      <ConfirmDialog
+        title="Confirm delete"
+        message={"Are you sure you want to delete stage " + stage.name}
+        onCancel={() => dispose()}
+        onConfirm={() => {
+          setLoading(true);
+          deleteStage(stage.id)
+            .then(() => {
+              mutate("/stage");
+              dispose();
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }}
+      />
     );
   };
   return (
@@ -77,7 +63,10 @@ const StagesScreen = () => {
       <AppBar
         title="Stages"
         actions={
-          <TouchableOpacity activeOpacity={0.5} onPress={handleaddStage}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => handleaddOrEditStage()}
+          >
             <ExpoIconComponent family="Entypo" name="add-to-list" />
           </TouchableOpacity>
         }
@@ -100,7 +89,41 @@ const StagesScreen = () => {
                 data={stages}
                 keyExtractor={({ id }) => id}
                 renderItem={({ item }) => (
-                  <SwipableAction actionButtons={actions}>
+                  <SwipableAction
+                    actionButtons={[
+                      {
+                        label: "Delete",
+                        onPress: () => handleDelete(item),
+                        backgroundColor: theme.colors.error,
+                        labelColor: "white",
+                        accessibilityLabel: "delete stage",
+                        isLoading: loading,
+                        icon: (
+                          <ExpoIconComponent
+                            family="FontAwesome"
+                            name="trash"
+                            size={18}
+                            color="white"
+                          />
+                        ),
+                      },
+                      {
+                        label: "Edit",
+                        onPress: () => handleaddOrEditStage(item),
+                        backgroundColor: theme.colors.secondary,
+                        labelColor: "white",
+                        accessibilityLabel: "edit stage",
+                        icon: (
+                          <ExpoIconComponent
+                            family="Feather"
+                            name="edit"
+                            size={18}
+                            color="white"
+                          />
+                        ),
+                      },
+                    ]}
+                  >
                     <ExpansionTile
                       leading={
                         <ExpoIconComponent family="FontAwesome6" name="bus" />
