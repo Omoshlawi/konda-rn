@@ -1,14 +1,12 @@
+import lodashUniqueId from "lodash/uniqueId";
+import { FC, memo, useMemo, useRef } from "react";
 import { StyleSheet } from "react-native";
 import Reanimated, {
   SharedValue,
-  useAnimatedProps,
   useAnimatedStyle,
-  runOnJS,
 } from "react-native-reanimated";
 import SwipableActionItem from "./SwipableActionItem";
-import { FC, memo, useMemo, useRef, useEffect } from "react";
 import { SwipableActionButton } from "./types";
-import lodashUniqueId from "lodash/uniqueId";
 
 const buttonWidth = 70;
 type Props = {

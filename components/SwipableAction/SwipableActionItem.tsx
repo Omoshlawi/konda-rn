@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, ActivityIndicator } from "react-native";
 import Reanimated from "react-native-reanimated";
 import { StyleSheet } from "react-native";
 import { SwipableActionButton } from "./types";
@@ -20,9 +20,13 @@ const SwipableActionItem: FC<Props> = ({ button }) => {
         accessibilityLabel={button.accessibilityLabel}
         disabled={button.isLoading}
       >
-        <Text style={[styles.actionButtonText, { color: button.labelColor }]}>
-          {button.label}
-        </Text>
+        {button.isLoading ? (
+          <ActivityIndicator color={button.labelColor} />
+        ) : (
+          <Text style={[styles.actionButtonText, { color: button.labelColor }]}>
+            {button.label}
+          </Text>
+        )}
       </TouchableOpacity>
     </Reanimated.View>
   );
@@ -38,6 +42,7 @@ const styles = StyleSheet.create({
   actionButton: {
     flexGrow: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
   actionButtonText: {
     fontWeight: 600,

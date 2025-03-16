@@ -17,29 +17,31 @@ import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useStages } from "../hooks";
 import { showModal } from "@/lib/overlays";
 import StageForm from "../forms/StageForm";
+import { useTheme } from "@/lib/theme";
 
 const StagesScreen = () => {
+  const theme = useTheme();
   const stagesAsync = useStages();
   const actions = useMemo<SwipableActionButton[]>(
     () => [
       {
-        label: "One",
+        label: "Delete",
         onPress: () => console.log("Pressed one"),
-        backgroundColor: "red",
+        backgroundColor: theme.colors.error,
         labelColor: "white",
-        accessibilityLabel: "actione one",
+        accessibilityLabel: "delete stage",
         isLoading: false,
       },
       {
-        label: "Two",
+        label: "Edit",
         onPress: () => console.log("Pressed two"),
-        backgroundColor: "blue",
+        backgroundColor: theme.colors.secondary,
         labelColor: "white",
-        accessibilityLabel: "actione two",
-        isLoading: false,
+        accessibilityLabel: "edit stage",
+        isLoading: true,
       },
     ],
-    []
+    [theme]
   );
   const handleaddStage = () => {
     const dispose = showModal(
@@ -79,16 +81,14 @@ const StagesScreen = () => {
                 data={stages}
                 keyExtractor={({ id }) => id}
                 renderItem={({ item }) => (
-                  <SwipableAction
-                    actionButtons={actions}
-                    enableOnboarding={false}
-                  >
+                  <SwipableAction actionButtons={actions}>
                     <ExpansionTile
                       leading={
                         <ExpoIconComponent family="FontAwesome6" name="bus" />
                       }
                       title={item.name}
                       subtitle={`${item.county?.name}, ${item.subCounty?.name}`}
+                      borderBottom
                     >
                       <Box>
                         <Text>{`Radius: ${item.radius} `}</Text>

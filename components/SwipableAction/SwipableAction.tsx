@@ -7,6 +7,7 @@ import Swipeable, {
   SwipeableMethods,
 } from "react-native-gesture-handler/ReanimatedSwipeable";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ViewProps } from "react-native";
 
 import SwipableActionItemContainer from "./SwipableActionItemContainer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -49,7 +50,7 @@ const SwipableAction = ({
   onOpen,
   onClose,
   actionButtons,
-  enableOnboarding,
+  enableOnboarding = true,
 }: Props) => {
   const showingOnboardingRef = useRef(false);
   const swipeableRef = useRef<SwipeableMethods>(null);
@@ -60,28 +61,32 @@ const SwipableAction = ({
     swipeableRef.current?.close();
     showingOnboardingRef.current = false;
   };
-  useEffect(() => {
-    (async () => {
-      if (!enableOnboarding) return;
 
+  useEffect(() => {
+    if (!enableOnboarding) return;
+
+    (async () => {
       const hasEnteredSmartPreviewCardMenuInPast = await AsyncStorage.getItem(
         "hasEnteredSmartPreviewCardMenuInPast"
       );
       if (hasEnteredSmartPreviewCardMenuInPast) return;
 
       showingOnboardingRef.current = true;
-      swipeableRef.current?.openRight();
-      showOnboarding();
+      if (swipeableRef.current?.openRight) {
+        showOnboarding();
+      }
     })();
-  }, [!!swipeableRef.current?.openRight]);
+  }, [enableOnboarding]);
 
-  let parentDrag = useSharedValue(0);
-  const animatedProps = useAnimatedProps(() => {
+  const parentDrag = useSharedValue(0);
+
+  // Fix the type issue with pointerEvents by using literal types
+  const animatedProps = useAnimatedProps<ViewProps>(() => {
+    // Use the proper literal types for pointerEvents
     return {
-      pointerEvents:
-        parentDrag.value !== 0 ? ("none" as const) : ("auto" as const),
+      pointerEvents: parentDrag.value !== 0 ? "none" : "auto",
     };
-  }, []);
+  });
 
   return (
     <GestureHandlerRootView onMoveShouldSetResponder={() => true}>
