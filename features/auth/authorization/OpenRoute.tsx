@@ -9,11 +9,11 @@ interface OpenRouteProps extends PropsWithChildren {
 
 const OpenRoute: FC<OpenRouteProps> = ({
   children,
-  redirectTo = { pathname: "/(tabs)/home" },
+  redirectTo = { pathname: "/(tabs)" },
 }) => {
   const { isAuthenticated } = useSession();
 
-  if (isAuthenticated) return <Redirect href={redirectTo} />;
+  if (isAuthenticated) return <Redirect href={redirectTo as any} />;
   return children;
 };
 

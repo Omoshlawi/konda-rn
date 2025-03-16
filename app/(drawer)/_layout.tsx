@@ -9,12 +9,11 @@ import {
 import Color from "color";
 import { router, usePathname } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
   const theme = useTheme();
-  const pathname = usePathname();
   const activeColor = useMemo(
     () => Color(theme.colors.primary).alpha(0.2).toString(),
     [theme.colors.primary]
@@ -35,11 +34,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
             size={28}
           />
         )}
-        style={{
-          backgroundColor:
-            pathname === "/home" ? activeColor : theme.colors.background,
-        }}
-        onPress={() => router.push("/(drawer)/(tabs)/home")}
+        onPress={() => router.push("/(drawer)/(tabs)")}
       />
       <DrawerItem
         activeTintColor={theme.colors.primary}
@@ -54,13 +49,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
             size={28}
           />
         )}
-        style={{
-          backgroundColor:
-            pathname === "/notifications"
-              ? activeColor
-              : theme.colors.background,
-        }}
-        onPress={() => router.push("/(drawer)/notifications")}
+        onPress={() => router.push("/notifications")}
       />
       <DrawerItem
         activeTintColor={theme.colors.primary}
@@ -75,11 +64,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
             size={28}
           />
         )}
-        style={{
-          backgroundColor:
-            pathname === "/admin" ? activeColor : theme.colors.background,
-        }}
-        onPress={() => router.push("/(drawer)/admin")}
+        onPress={() => router.push("/admin")}
       />
     </DrawerContentScrollView>
   );
@@ -87,7 +72,12 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
 
 const Drawerlayout = () => {
   const theme = useTheme();
+  const rawPathname = usePathname();
+  const [pathname, setPathname] = useState("/");
 
+  useEffect(() => {
+    setPathname(rawPathname);
+  }, [rawPathname]);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -100,13 +90,13 @@ const Drawerlayout = () => {
             backgroundColor: theme.colors.background,
           },
           headerTintColor: theme.colors.text,
-          // headerTitle: "",
+          headerShown: pathname === "/",
+          headerTitle: "",
         }}
       >
         <Drawer.Screen
           name="(tabs)"
           options={{
-            drawerLabel: "Home",
             title: "Home",
           }}
         />

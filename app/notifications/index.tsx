@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const AdminLanding = () => {
+const Notifications = () => {
   return (
     <View>
-      <Text>AdminLanding</Text>
+      <Text>Notifications</Text>
     </View>
   );
 };
 
-export default AdminLanding;
+export default Notifications;
 
 const styles = StyleSheet.create({});

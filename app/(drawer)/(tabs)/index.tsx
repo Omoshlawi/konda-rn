@@ -6,7 +6,7 @@ import APITest from "@/lib/api/APITest";
 
 export default function HomeScreen() {
   return (
-    <ThemedPageLayout>
+    <ThemedPageLayout withSafeArea={false}>
       <HelloWave />
       <APITest />
     </ThemedPageLayout>

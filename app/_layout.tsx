@@ -7,7 +7,7 @@ import "react-native-reanimated";
 
 import { useLoadInitialAuthState } from "@/features/auth/hooks";
 import { ApiConfigProvider } from "@/lib/api";
-import { useUserPreferenceStore } from "@/lib/global-store";
+import { useUserPreferedTheme, useUserPreferenceStore } from "@/lib/global-store";
 import { OverlayPortal } from "@/lib/overlays";
 import { ThemeProvider } from "@/lib/theme";
 
@@ -18,7 +18,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
-  const theme = useUserPreferenceStore((state) => state.userPreferences.theme); // Contains also system
+  const theme = useUserPreferedTheme();
   const { isLoading } = useLoadInitialAuthState();
 
   useEffect(() => {
@@ -35,12 +35,14 @@ export default function RootLayout() {
     <ThemeProvider>
       <ApiConfigProvider>
         <OverlayPortal>
+          <StatusBar style={theme == "dark" ? "light" : "dark"} />
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(drawer)" />
+            <Stack.Screen name="admin" />
+            <Stack.Screen name="notifications" />
             <Stack.Screen name="(authentication)" />
             <Stack.Screen name="+not-found" />
           </Stack>
-          <StatusBar style={theme == "dark" ? "light" : "dark"} />
         </OverlayPortal>
       </ApiConfigProvider>
     </ThemeProvider>

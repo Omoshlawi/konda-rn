@@ -16,11 +16,11 @@ export default function TabLayout() {
           backgroundColor: theme.colors.background,
         },
       }}
+      initialRouteName="index"
     >
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{
-          href: "/home",
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
             <ExpoIconComponent
@@ -35,7 +35,6 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cmd"
         options={{
-          href: "/cmd",
           title: "CMD",
           tabBarIcon: ({ color, focused }) => (
             <ExpoIconComponent
@@ -52,7 +51,6 @@ export default function TabLayout() {
         name="settings"
         options={{
           title: "Settings",
-          href: "/settings",
           tabBarIcon: ({ color, focused }) => (
             <ExpoIconComponent
               family="Ionicons"
