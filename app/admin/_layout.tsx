@@ -6,6 +6,9 @@ const AdminLayout = () => {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="stages" />
+      <Stack.Screen name="routes" />
+      <Stack.Screen name="operators" />
+      <Stack.Screen name="fleets" />
     </Stack>
   );
 };

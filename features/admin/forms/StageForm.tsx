@@ -172,7 +172,11 @@ const StageForm: FC<Props> = ({ onSuccess, stage }) => {
             />
           )}
         />
-        <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+        <Button
+          title="Submit"
+          onPress={form.handleSubmit(onSubmit)}
+          loading={form.formState.isSubmitting}
+        />
       </Box>
     </ScrollView>
   );
