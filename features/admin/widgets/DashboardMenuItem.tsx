@@ -57,7 +57,7 @@ export default DashboardMenuItem;
 
 const styles = StyleSheet.create({
   clickable: {
-    flexBasis: "29%", // Each item takes up one-third of the row width
+    flexBasis: "48%", // Each item takes up one-third of the row width
     flexGrow: 1, // Allow items to grow uniformly
     aspectRatio: 1, // Maintain square shape
   },
