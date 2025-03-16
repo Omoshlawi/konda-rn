@@ -1,9 +1,9 @@
-import { Routesscreen } from "@/features/admin/screens";
+import { RoutesScreen } from "@/features/admin/screens";
 import React from "react";
 import { StyleSheet } from "react-native";
 
 const Routes = () => {
-  return <Routesscreen />;
+  return <RoutesScreen />;
 };
 
 export default Routes;

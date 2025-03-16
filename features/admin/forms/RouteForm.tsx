@@ -116,7 +116,7 @@ const RouteForm: FC<Props> = ({ onSuccess, route }) => {
             fieldState: { error },
           }) => (
             <TextInput
-              value={`${value} ?? ""`}
+              value={`${value ?? ""}`}
               keyboardType="numeric"
               label="Aproximate distance(Km)"
               readOnly={disabled}
@@ -134,7 +134,7 @@ const RouteForm: FC<Props> = ({ onSuccess, route }) => {
             fieldState: { error },
           }) => (
             <TextInput
-              value={`${value} ?? ""`}
+              value={`${value ?? ""}`}
               keyboardType="numeric"
               label="Aproximate time(Mins)"
               readOnly={disabled}
