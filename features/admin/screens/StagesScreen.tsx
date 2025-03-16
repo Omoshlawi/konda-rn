@@ -16,7 +16,7 @@ import React, { useMemo, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useStages, useStagesApi } from "../hooks";
 import { ConfirmDialog, showDialog, showModal } from "@/lib/overlays";
-import StageForm from "../forms/StageForm";
+import { StageForm } from "../forms";
 import { useTheme } from "@/lib/theme";
 import { Stage } from "../types";
 import { mutate } from "@/lib/api";
@@ -133,9 +133,13 @@ const StagesScreen = () => {
                       borderBottom
                     >
                       <Box>
-                        <Text>{`Radius: ${item.radius} `}</Text>
-                        <Text>{`Latitude: ${item.latitude} `}</Text>
-                        <Text>{`Longitude: ${item.longitude} `}</Text>
+                        <Text color={"text"}>{`Radius: ${item.radius} `}</Text>
+                        <Text
+                          color={"text"}
+                        >{`Latitude: ${item.latitude} `}</Text>
+                        <Text
+                          color={"text"}
+                        >{`Longitude: ${item.longitude} `}</Text>
                       </Box>
                     </ExpansionTile>
                   </SwipableAction>

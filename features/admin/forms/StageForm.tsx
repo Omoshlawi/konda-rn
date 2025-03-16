@@ -43,7 +43,7 @@ const StageForm: FC<Props> = ({ onSuccess, stage }) => {
       const res = stage
         ? await updateStage(stage?.id, data)
         : await createStage(data);
-      onSuccess?.(res.data);
+      onSuccess?.(res);
       mutate("/stage");
       showSnackbar({
         title: "succes",

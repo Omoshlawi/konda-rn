@@ -14,7 +14,7 @@ export const useRoutes = () => {
 };
 
 const createRoute = async (data: RouteFormData) => {
-  const response = await apiFetch(`/route`, { method: "POST", data });
+  const response = await apiFetch<Route>(`/route`, { method: "POST", data });
   return response.data;
 };
 const updateRoute = async (
@@ -22,7 +22,7 @@ const updateRoute = async (
   data: RouteFormData,
   method: "PUT" | "PATCH" = "PATCH"
 ) => {
-  const response = await apiFetch(`/route/${routeId}`, {
+  const response = await apiFetch<Route>(`/route/${routeId}`, {
     method: method,
     data,
   });
@@ -32,7 +32,9 @@ const deleteRoute = async (
   routeId: string,
   method: "DELETE" | "PURGE" = "DELETE"
 ) => {
-  const response = await apiFetch(`/stage/${routeId}`, { method: method });
+  const response = await apiFetch<Route>(`/route/${routeId}`, {
+    method: method,
+  });
   return response.data;
 };
 

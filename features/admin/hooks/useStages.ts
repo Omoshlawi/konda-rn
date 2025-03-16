@@ -14,7 +14,7 @@ export const useStages = () => {
 };
 
 const createStage = async (data: StageFormData) => {
-  const response = await apiFetch(`/stage`, { method: "POST", data });
+  const response = await apiFetch<Stage>(`/stage`, { method: "POST", data });
   return response.data;
 };
 const updateStage = async (
@@ -22,7 +22,7 @@ const updateStage = async (
   data: StageFormData,
   method: "PUT" | "PATCH" = "PATCH"
 ) => {
-  const response = await apiFetch(`/stage/${stageId}`, {
+  const response = await apiFetch<Stage>(`/stage/${stageId}`, {
     method: method,
     data,
   });
@@ -32,7 +32,9 @@ const deleteStage = async (
   stageId: string,
   method: "DELETE" | "PURGE" = "DELETE"
 ) => {
-  const response = await apiFetch(`/stage/${stageId}`, { method: method });
+  const response = await apiFetch<Stage>(`/stage/${stageId}`, {
+    method: method,
+  });
   return response.data;
 };
 export const useStagesApi = () => {

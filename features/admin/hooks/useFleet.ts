@@ -2,7 +2,7 @@ import { apiFetch, APIFetchResponse, constructUrl, useApi } from "@/lib/api";
 import { Fleet, FleetFormData } from "../types";
 
 export const useFleet = () => {
-  const url = constructUrl(`/fleet`, { v: "custom:include(details)" });
+  const url = constructUrl(`/fleet`);
   const { data, error, mutate, isLoading } =
     useApi<APIFetchResponse<{ results: Array<Fleet> }>>(url);
   return {
@@ -14,7 +14,7 @@ export const useFleet = () => {
 };
 
 const createFleet = async (data: FleetFormData) => {
-  const response = await apiFetch(`/fleet`, { method: "POST", data });
+  const response = await apiFetch<Fleet>(`/fleet`, { method: "POST", data });
   return response.data;
 };
 const updateFleet = async (
@@ -22,7 +22,7 @@ const updateFleet = async (
   data: FleetFormData,
   method: "PUT" | "PATCH" = "PATCH"
 ) => {
-  const response = await apiFetch(`/fleet/${fleetId}`, {
+  const response = await apiFetch<Fleet>(`/fleet/${fleetId}`, {
     method: method,
     data,
   });
@@ -32,7 +32,9 @@ const deleteFleet = async (
   fleetId: string,
   method: "DELETE" | "PURGE" = "DELETE"
 ) => {
-  const response = await apiFetch(`/fleet/${fleetId}`, { method: method });
+  const response = await apiFetch<Fleet>(`/fleet/${fleetId}`, {
+    method: method,
+  });
   return response.data;
 };
 export const useFleetApi = () => {
