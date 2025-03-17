@@ -10,7 +10,7 @@ const ContinueAsGuestUserButton = () => {
     <Button
       title="Continue as guest user"
       variant="secondary"
-      onPress={() => router.navigate("/home")}
+      onPress={() => router.navigate("/(drawer)/(tabs)")}
     />
   );
 };

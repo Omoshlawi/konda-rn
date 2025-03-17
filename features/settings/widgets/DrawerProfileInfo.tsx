@@ -1,28 +1,37 @@
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import React from "react";
 import { useSession } from "@/lib/global-store";
 import { Box, ImageViewer, Text } from "@/components";
+import { useRouter } from "expo-router";
 
 const DrawerProfileInfo = () => {
   const { user } = useSession();
+  const router = useRouter();
   return (
-    <Box
-      gap={"s"}
-      flexDirection={"row"}
-      alignItems={"center"}
-      marginBottom={"m"}
-      borderBottomWidth={StyleSheet.hairlineWidth}
-      borderColor={"hintColor"}
-      paddingBottom={"l"}
+    <Pressable
+      onPress={() => {
+        if (user) router.push("/settings");
+        router.push("/(authentication)/login");
+      }}
     >
-      <ImageViewer style={styles.avatar} />
-      <Box>
-        <Text fontWeight={"700"} variant={"bodyLarge"} color={"text"}>
-          {user ? user?.person?.name ?? "Update name" : "Guest User"}
-        </Text>
-        <Text color={"text"}>{user?.person?.email ?? "Sign In"}</Text>
+      <Box
+        gap={"s"}
+        flexDirection={"row"}
+        alignItems={"center"}
+        marginBottom={"m"}
+        borderBottomWidth={StyleSheet.hairlineWidth}
+        borderColor={"hintColor"}
+        paddingBottom={"l"}
+      >
+        <ImageViewer style={styles.avatar} />
+        <Box>
+          <Text fontWeight={"700"} variant={"bodyLarge"} color={"text"}>
+            {user ? user?.person?.name ?? "Update name" : "Guest User"}
+          </Text>
+          <Text color={"text"}>{user?.person?.email ?? "Sign In"}</Text>
+        </Box>
       </Box>
-    </Box>
+    </Pressable>
   );
 };
 

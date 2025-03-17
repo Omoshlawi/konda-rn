@@ -3,10 +3,11 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Box, IconButton, Text, ThemedPageLayout } from "@/components";
 import { TripSummaryCard } from "@/features/trip/widgets";
 import { useTheme } from "@/lib/theme";
-import { router, useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const router = useRouter();
   const theme = useTheme();
   return (
     <ThemedPageLayout>
