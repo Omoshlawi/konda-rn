@@ -71,7 +71,6 @@ const LoginForm = () => {
               <ExpoIconComponent
                 family="Ionicons"
                 name={!showPassword ? "eye-off" : "eye"}
-                size={20}
               />
             }
             secureTextEntry={!showPassword}

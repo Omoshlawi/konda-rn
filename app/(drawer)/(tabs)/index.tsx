@@ -1,7 +1,7 @@
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 import { Box, IconButton, Text, ThemedPageLayout } from "@/components";
-import { HelloWave } from "@/components/HelloWave";
+import { TripSummaryCard } from "@/features/trip/widgets";
 import { useTheme } from "@/lib/theme";
 import { router, useNavigation } from "expo-router";
 
@@ -52,6 +52,13 @@ export default function HomeScreen() {
         <Text color={"hintColor"} variant={"titleMedium"}>
           {new Date().toDateString()}
         </Text>
+      </Box>
+      <Box px={"l"}>
+        <ScrollView>
+          <Box gap={"m"} mt={"l"}>
+            <TripSummaryCard />
+          </Box>
+        </ScrollView>
       </Box>
     </ThemedPageLayout>
   );

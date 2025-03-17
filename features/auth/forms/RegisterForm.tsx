@@ -115,7 +115,6 @@ const RegisterForm = () => {
               <ExpoIconComponent
                 family="Ionicons"
                 name={!showPassword ? "eye-off" : "eye"}
-                size={20}
               />
             }
             secureTextEntry={!showPassword}
@@ -142,7 +141,6 @@ const RegisterForm = () => {
               <ExpoIconComponent
                 family="Ionicons"
                 name={!showPassword ? "eye-off" : "eye"}
-                size={20}
               />
             }
             secureTextEntry={!showPassword}

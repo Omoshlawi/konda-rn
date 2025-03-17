@@ -2,11 +2,14 @@ import React, { FC, ReactNode, useState } from "react";
 import {
   StyleProp,
   StyleSheet,
+  TouchableHighlight,
   TouchableOpacity,
   ViewProps,
 } from "react-native";
 import Box from "../Box";
 import Text from "../Text";
+import Color from "color";
+import { useTheme } from "@/lib/theme";
 
 type RenderProps = {
   onFocus?: () => void;
@@ -39,6 +42,7 @@ const InputDecoration: FC<InputDecorationProps> = ({
   renderInput,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const theme = useTheme();
   return (
     <Box width={"100%"} gap={"s"}>
       {label && (
@@ -61,20 +65,25 @@ const InputDecoration: FC<InputDecorationProps> = ({
         flexDirection={"row"}
         alignItems={"center"}
         width={"100%"}
-        p={"s"}
-        gap={"s"}
+        p={!(prefixIcon || suffixIcon) ? "s" : undefined}
+        pl={!prefixIcon ? "s" : undefined}
         style={style}
       >
         {prefixIcon && (
-          <TouchableOpacity
+          <TouchableHighlight
+            underlayColor={Color(theme.colors.primary).lighten(0.8).toString()}
             onPress={onPrefixIconPressed}
             style={{
               justifyContent: "center",
               alignItems: "center",
+              padding: theme.spacing.s,
+              borderRadius: "50%",
+              alignSelf: "flex-start",
+              aspectRatio: 1,
             }}
           >
             {prefixIcon}
-          </TouchableOpacity>
+          </TouchableHighlight>
         )}
         <Box flex={1}>
           {renderInput?.({
@@ -83,15 +92,20 @@ const InputDecoration: FC<InputDecorationProps> = ({
           })}
         </Box>
         {suffixIcon && (
-          <TouchableOpacity
+          <TouchableHighlight
             onPress={onSuffixIconPressed}
+            underlayColor={Color(theme.colors.primary).lighten(0.8).toString()}
             style={{
               justifyContent: "center",
               alignItems: "center",
+              padding: theme.spacing.s,
+              borderRadius: "50%",
+              alignSelf: "flex-start",
+              aspectRatio: 1,
             }}
           >
             {suffixIcon}
-          </TouchableOpacity>
+          </TouchableHighlight>
         )}
       </Box>
       {(error || helperText) && (
