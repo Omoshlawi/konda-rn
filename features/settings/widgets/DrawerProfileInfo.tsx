@@ -11,7 +11,7 @@ const DrawerProfileInfo = () => {
     <Pressable
       onPress={() => {
         if (user) router.push("/settings");
-        router.push("/(authentication)/login");
+        else router.push("/(authentication)/login");
       }}
     >
       <Box

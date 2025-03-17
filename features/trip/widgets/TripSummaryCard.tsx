@@ -10,7 +10,7 @@ const TripSummarycard = () => {
       <Box
         borderRadius={"large"}
         backgroundColor={"primary"}
-        height={100}
+        height={200}
         width={"100%"}
       ></Box>
     </Box>
