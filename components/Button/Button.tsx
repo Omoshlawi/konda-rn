@@ -21,6 +21,7 @@ interface StyledButtonProps {
   style?: StyleProp<ViewStyle>;
   labelStyle?: StyleProp<TextStyle>;
   loading?: boolean;
+  underlayColor?: string;
 }
 
 const Button: FC<StyledButtonProps> = ({
@@ -33,6 +34,7 @@ const Button: FC<StyledButtonProps> = ({
   labelStyle,
   style,
   loading = false,
+  underlayColor,
 }) => {
   const theme = useTheme();
   const colors = useMemo(() => {
@@ -80,7 +82,7 @@ const Button: FC<StyledButtonProps> = ({
         },
         style,
       ]}
-      underlayColor={colors.underlayColor}
+      underlayColor={underlayColor ?? colors.underlayColor}
     >
       {loading ? (
         <ActivityIndicator color={colors.color} />

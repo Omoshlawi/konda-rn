@@ -4,11 +4,13 @@ import { Box, IconButton, Text, ThemedPageLayout } from "@/components";
 import { TripSummaryCard } from "@/features/trip/widgets";
 import { useTheme } from "@/lib/theme";
 import { useNavigation, useRouter } from "expo-router";
+import { useSession } from "@/lib/global-store";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const router = useRouter();
   const theme = useTheme();
+  const { user } = useSession();
   return (
     <ThemedPageLayout>
       <Box
@@ -48,7 +50,7 @@ export default function HomeScreen() {
       </Box>
       <Box px={"l"}>
         <Text variant={"titleLarge"} fontWeight={"700"} color={"text"}>
-          Welcome, {"Guest User"}
+          Welcome, {user ? user?.person.name ?? user?.username : "Guest User"}
         </Text>
         <Text color={"hintColor"} variant={"titleMedium"}>
           {new Date().toDateString()}
