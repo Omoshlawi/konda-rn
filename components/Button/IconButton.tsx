@@ -10,7 +10,7 @@ import { ExpoIcon, ExpoIconComponent } from "../ExpoIcons";
 import { useTheme } from "@/lib/theme";
 import Color from "color";
 
-type Variant = "tonal" | "outline" | "filled";
+type Variant = "tonal" | "outline" | "filled" | "ghost";
 
 type Props = {
   icon: ExpoIcon;
@@ -19,7 +19,15 @@ type Props = {
   borderRadius?: string | AnimatableNumericValue;
   color?: string;
   size?: number;
+  iconSize?: number;
+  padding?: number;
+  aspectRatio?: number;
+  borderWidth?: number;
+  underlayColor?: string;
   containerStyle?: StyleProp<ViewStyle>;
+  iconPosition?: "left" | "right" | "top" | "bottom" | "center";
+  pressEffect?: "opacity" | "scale";
+  shadow?: boolean;
 };
 
 const IconButton: FC<Props> = ({
@@ -29,7 +37,15 @@ const IconButton: FC<Props> = ({
   borderRadius = "50%",
   color,
   size = 28,
+  iconSize,
+  padding,
+  aspectRatio = 1,
+  borderWidth = 1,
+  underlayColor,
   containerStyle,
+  iconPosition = "center",
+  pressEffect = "opacity",
+  shadow = false,
 }) => {
   const theme = useTheme();
 
@@ -38,17 +54,31 @@ const IconButton: FC<Props> = ({
       return {
         backgroundColor: color ?? theme.colors.primary,
         color: theme.colors.onPrimary,
-        underlayColor: Color(color ?? theme.colors.primary)
-          .darken(0.2)
-          .toString(),
+        underlayColor:
+          underlayColor ??
+          Color(color ?? theme.colors.primary)
+            .darken(0.2)
+            .toString(),
       };
     else if (variant === "outline")
       return {
         backgroundColor: "transparent",
         color: color ?? theme.colors.outline,
-        underlayColor: Color(color ?? theme.colors.outline)
-          .lighten(0.8)
-          .toString(),
+        underlayColor:
+          underlayColor ??
+          Color(color ?? theme.colors.outline)
+            .lighten(0.8)
+            .toString(),
+      };
+    else if (variant === "ghost")
+      return {
+        backgroundColor: "transparent",
+        color: color ?? theme.colors.primary,
+        underlayColor:
+          underlayColor ??
+          Color(color ?? theme.colors.primary)
+            .lighten(0.8)
+            .toString(),
       };
     else
       return {
@@ -56,26 +86,46 @@ const IconButton: FC<Props> = ({
           .lighten(0.7)
           .toString(),
         color: color ?? theme.colors.primary,
-        underlayColor: Color(color ?? theme.colors.primary)
-          .lighten(0.8)
-          .toString(),
+        underlayColor:
+          underlayColor ??
+          Color(color ?? theme.colors.primary)
+            .lighten(0.8)
+            .toString(),
       };
-  }, [variant]);
+  }, [variant, color, underlayColor, theme]);
+
+  const iconStyles = useMemo(() => {
+    const positionStyles = {
+      left: { marginRight: theme.spacing.s },
+      right: { marginLeft: theme.spacing.s },
+      top: { marginBottom: theme.spacing.s },
+      bottom: { marginTop: theme.spacing.s },
+      center: {},
+    };
+    return positionStyles[iconPosition];
+  }, [iconPosition, theme]);
 
   return (
     <TouchableHighlight
       style={[
         {
           backgroundColor: colors.backgroundColor,
-          padding: theme.spacing.s,
+          padding: padding ?? theme.spacing.s,
           borderRadius: borderRadius,
           alignSelf: "flex-start",
-          aspectRatio: 1,
+          aspectRatio: aspectRatio,
           justifyContent: "center",
           alignItems: "center",
+          ...(shadow && {
+            shadowColor: theme.colors.shadow,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            elevation: 5,
+          }),
         },
         variant === "outline" && {
-          borderWidth: 1,
+          borderWidth: borderWidth,
           borderColor: color ?? theme.colors.outline,
         },
         containerStyle,
@@ -83,7 +133,12 @@ const IconButton: FC<Props> = ({
       underlayColor={colors.underlayColor}
       onPress={onPress}
     >
-      <ExpoIconComponent {...icon} color={colors.color} size={size} />
+      <ExpoIconComponent
+        {...icon}
+        color={colors.color}
+        size={iconSize ?? size}
+        style={iconStyles}
+      />
     </TouchableHighlight>
   );
 };

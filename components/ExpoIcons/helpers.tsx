@@ -2,6 +2,7 @@ import * as Icons from "@expo/vector-icons";
 import React, { FC } from "react";
 import { FontAwesome5Icons } from "./fontAwsome5";
 import { useTheme } from "@/lib/theme";
+import { StyleProp, TextStyle } from "react-native";
 
 const EXPO_ICON_FAMILIES = {
   AntDesign: Icons.AntDesign,
@@ -52,6 +53,7 @@ export const getExpoIconFamiliesNames = () =>
 type ExpoIconComponentProps = ExpoIcon & {
   size?: number;
   color?: string;
+  style?: StyleProp<TextStyle>;
 };
 
 export const ExpoIconComponent: FC<ExpoIconComponentProps> = ({
@@ -59,6 +61,7 @@ export const ExpoIconComponent: FC<ExpoIconComponentProps> = ({
   name,
   size = 28,
   color,
+  style,
 }) => {
   const IconComponent = EXPO_ICON_FAMILIES[family];
   const { colors } = useTheme();
@@ -68,7 +71,15 @@ export const ExpoIconComponent: FC<ExpoIconComponentProps> = ({
         name={name}
         size={size}
         color={color ?? colors.icon}
+        style={style}
       />
     );
-  return <IconComponent name={name} size={size} color={color ?? colors.icon} />;
+  return (
+    <IconComponent
+      name={name}
+      size={size}
+      color={color ?? colors.icon}
+      style={style}
+    />
+  );
 };

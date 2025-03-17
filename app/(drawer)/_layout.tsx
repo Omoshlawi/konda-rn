@@ -1,4 +1,4 @@
-import { ExpoIconComponent } from "@/components";
+import { ExpoIconComponent, IconButton } from "@/components";
 import { DrawerProfileInfo } from "@/features/settings";
 import { useTheme } from "@/lib/theme";
 import {
@@ -72,12 +72,6 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
 
 const Drawerlayout = () => {
   const theme = useTheme();
-  const rawPathname = usePathname();
-  const [pathname, setPathname] = useState("/");
-
-  useEffect(() => {
-    setPathname(rawPathname);
-  }, [rawPathname]);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -86,12 +80,7 @@ const Drawerlayout = () => {
           drawerActiveTintColor: theme.colors.primary,
           drawerStyle: { backgroundColor: theme.colors.background },
           drawerLabelStyle: { color: theme.colors.text },
-          headerStyle: {
-            backgroundColor: theme.colors.background,
-          },
-          headerTintColor: theme.colors.text,
-          headerShown: pathname === "/",
-          headerTitle: "",
+          headerShown: false,
         }}
       >
         <Drawer.Screen
