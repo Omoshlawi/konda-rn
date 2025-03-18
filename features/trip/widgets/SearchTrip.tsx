@@ -1,9 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { FC, useState } from "react";
 import { ExpoIconComponent, TextInput } from "@/components";
 import { useTheme } from "@/lib/theme";
 
-const SearchTrip = () => {
+type Props = {
+  fleetNo?: string;
+  onChangeFleetNo?: (fleetNo: string) => void;
+};
+
+const SearchTrip: FC<Props> = ({ fleetNo, onChangeFleetNo }) => {
+  const [value, setValue] = useState<string | undefined>(fleetNo);
   const theme = useTheme();
   return (
     <TextInput
@@ -11,8 +17,18 @@ const SearchTrip = () => {
       prefixIcon={
         <ExpoIconComponent family="MaterialIcons" name="qr-code-scanner" />
       }
-      placeholder="Scan QR Code at the nack of the seat"
+      value={value}
+      onChangeText={setValue}
+      suffixIcon={<ExpoIconComponent family="AntDesign" name="arrowright" />}
+      placeholder="Scan QR or enter fleet Number"
       onPrefixIconPressed={() => {}}
+      onSuffixIconPressed={
+        value
+          ? () => {
+              onChangeFleetNo?.(value!);
+            }
+          : undefined
+      }
     />
   );
 };

@@ -13,7 +13,6 @@ const Shell = () => {
   const theme = useTheme();
   const [cmd, setCmd] = useState<string>();
 
-  // Modify your useEffect to store the socket instance
   useEffect(function didMount() {
     const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/cmd`, {
       reconnectionDelayMax: 10000,

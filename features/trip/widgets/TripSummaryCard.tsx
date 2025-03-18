@@ -1,20 +1,67 @@
 import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, ImageViewer, Text } from "@/components";
 import SearchTrip from "./SearchTrip";
 import { useTheme } from "@/lib/theme";
 import Color from "color";
 import QRCode from "react-native-qrcode-svg";
+import { BASE_URL, websocketBaseUrl } from "@/constants";
+import { io, Socket } from "socket.io-client";
+import { Route, Stage } from "@/features/admin/types";
+import { showSnackbar } from "@/lib/overlays";
 
 const TripSummarycard = () => {
-  const currentLocation = "Ruiru";
-  const nextLocation = "Juja";
-  const routeName = "Juja - CBD";
-  const fleetNumber = "SM002";
+  const [currentLocation, setCurrentLocation] = useState<string>();
+  const [nextLocation, setNextLocation] = useState<string>();
+  const [routeName, setRouteName] = useState<string>();
   const theme = useTheme();
+  const [fleetNo, setFleetNo] = useState<string>();
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [connected, setConnected] = useState(false);
+
+  useEffect(
+    function didMount() {
+      if (fleetNo) {
+        const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
+          reconnectionDelayMax: 10000,
+        });
+        setSocket(socketInstance); // Store socket instance in state
+        socketInstance.io.on("open", () => setConnected(true));
+        socketInstance.io.on("close", () => {
+          setRouteName(undefined);
+          setCurrentLocation(undefined);
+          setNextLocation(undefined);
+          setConnected(false);
+        });
+
+        socketInstance.emit("join", fleetNo);
+        socketInstance.on("join", (fleetNo: string) => {
+          showSnackbar({
+            kind: "success",
+            title: "Success",
+            subtitle: "Succesfully connected to fleet " + fleetNo,
+          });
+          socketInstance.emit("stream_movement", fleetNo);
+          socketInstance.on(
+            "stream_movement",
+            (route: Route, currStage: Stage, nextStage: Stage) => {
+              setRouteName(route.name);
+              setCurrentLocation(currStage?.name);
+              setNextLocation(nextStage.name);
+            }
+          );
+        });
+        return function didUnmount() {
+          socketInstance.disconnect();
+          socketInstance.removeAllListeners();
+        };
+      }
+    },
+    [fleetNo]
+  );
   return (
     <Box gap={"s"} mt={"m"}>
-      <SearchTrip />
+      <SearchTrip fleetNo={fleetNo} onChangeFleetNo={setFleetNo} />
       <Box
         borderRadius={"large"}
         backgroundColor={"primary"}
@@ -34,14 +81,14 @@ const TripSummarycard = () => {
             fontWeight={"700"}
             variant={"titleLarge"}
           >
-            Current stage: {currentLocation}
+            Current stage: {currentLocation ?? "-"}
           </Text>
           <Text
             fontWeight={"700"}
             variant={"bodySmall"}
             style={{ color: Color("white").alpha(0.6).toString() }}
           >
-            Route: {routeName}
+            Route: {routeName ?? "-"}
           </Text>
         </Box>
         <QRCode
@@ -57,14 +104,14 @@ const TripSummarycard = () => {
             style={{ color: Color("white").alpha(0.6).toString() }}
             fontStyle={"italic"}
           >
-            Fleet No. {fleetNumber}
+            Fleet No. {fleetNo ?? "-"}
           </Text>
           <Text
             style={{ color: "white" }}
             fontWeight={"700"}
             variant={"bodyLarge"}
           >
-            Next Stage: {nextLocation}
+            Next Stage: {nextLocation ?? "-"}
           </Text>
         </Box>
         <Button
@@ -85,10 +132,27 @@ const TripSummarycard = () => {
           variant="tertiary"
           onPress={() => {}}
         />
-        <ImageViewer
-          source={require("@/assets/images/card-marker.png")}
-          style={[styles.img, { top: theme.spacing.s, right: theme.spacing.s }]}
-        />
+        <Box
+          position={"absolute"}
+          top={theme.spacing.m}
+          right={theme.spacing.m}
+          flexDirection={"row"}
+          alignItems={"center"}
+          gap={"s"}
+        >
+          <Box
+            width={8}
+            height={8}
+            backgroundColor={connected ? "success" : "error"}
+          />
+          <Text
+            color={connected ? "success" : "error"}
+            fontWeight={"bold"}
+            variant={"labelSmall"}
+          >
+            {connected ? "Connected" : "Not Connected"}
+          </Text>
+        </Box>
       </Box>
     </Box>
   );

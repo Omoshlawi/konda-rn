@@ -2,7 +2,7 @@ export const darkColorScheme = {
   skeleton: "#3a3a3a", // Dark gray for the base skeleton color
   onSkeleton: "#5c5c5c", // Slightly lighter gray for the shimmer effect, can use 4d4d4d
   background: "#121318",
-  error: "#ffb4ab",
+  error: "#ba1a1a",
   errorContainer: "#93000a",
   inversePrimary: "#475d92",
   inverseSurface: "#e2e2e9",

@@ -103,6 +103,7 @@ const Routestages: FC<Props> = ({ route }) => {
             </Text>
             {routestages.map((routeStage) => (
               <SwipableAction
+                key={routeStage.id}
                 actionButtons={[
                   {
                     label: "Edit",
@@ -138,8 +139,7 @@ const Routestages: FC<Props> = ({ route }) => {
                 ]}
               >
                 <ListTile
-                  key={routeStage.id}
-                  title={routeStage.stage?.name ?? "Hello"}
+                  title={`${routeStage.order}. ${routeStage.stage?.name}`}
                   subtitle={`${routeStage?.stage?.county?.name}, ${routeStage?.stage?.subCounty?.name}`}
                   borderBottom
                 />
