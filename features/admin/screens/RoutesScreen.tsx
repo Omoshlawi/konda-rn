@@ -3,7 +3,7 @@ import { ConfirmDialog, showDialog, showModal } from "@/lib/overlays";
 import { useTheme } from "@/lib/theme";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { RouteForm } from "../forms";
+import { RouteForm, RouteStageForm } from "../forms";
 import { useRoutes, useRoutesApi } from "../hooks";
 import { Route } from "../types";
 import {
@@ -34,6 +34,18 @@ const RoutesScreen = () => {
         route={route}
       />,
       { title: "Add Route" }
+    );
+  };
+
+  const handleAddRouteStage = (route: Route) => {
+    const dispose = showModal(
+      <RouteStageForm
+        onSuccess={() => {
+          dispose();
+        }}
+        route={route}
+      />,
+      { title: "Add Route Stage" }
     );
   };
 
@@ -92,16 +104,15 @@ const RoutesScreen = () => {
                   <SwipableAction
                     actionButtons={[
                       {
-                        label: "Delete",
-                        onPress: () => handleDelete(item),
-                        backgroundColor: theme.colors.error,
+                        label: "Add Stage",
+                        onPress: () => handleAddRouteStage(item),
+                        backgroundColor: theme.colors.success,
                         labelColor: "white",
-                        accessibilityLabel: "delete route",
-                        isLoading: loading,
+                        accessibilityLabel: "Add route stage",
                         icon: (
                           <ExpoIconComponent
-                            family="FontAwesome"
-                            name="trash"
+                            family="Feather"
+                            name="plus"
                             size={18}
                             color="white"
                           />
@@ -117,6 +128,22 @@ const RoutesScreen = () => {
                           <ExpoIconComponent
                             family="Feather"
                             name="edit"
+                            size={18}
+                            color="white"
+                          />
+                        ),
+                      },
+                      {
+                        label: "Delete",
+                        onPress: () => handleDelete(item),
+                        backgroundColor: theme.colors.error,
+                        labelColor: "white",
+                        accessibilityLabel: "delete route",
+                        isLoading: loading,
+                        icon: (
+                          <ExpoIconComponent
+                            family="FontAwesome"
+                            name="trash"
                             size={18}
                             color="white"
                           />

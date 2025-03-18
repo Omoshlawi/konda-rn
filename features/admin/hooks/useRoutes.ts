@@ -1,5 +1,5 @@
 import { apiFetch, APIFetchResponse, constructUrl, useApi } from "@/lib/api";
-import { Route, RouteFormData } from "../types";
+import { Route, RouteFormData, RouteStage, RouteStageFormData } from "../types";
 
 export const useRoutes = () => {
   const url = constructUrl("/route");
@@ -37,11 +37,49 @@ const deleteRoute = async (
   });
   return response.data;
 };
+const createRouteStage = async (routeId: string, data: RouteStageFormData) => {
+  const response = await apiFetch<RouteStage>(`/route/${routeId}/stages`, {
+    method: "POST",
+    data,
+  });
+  return response.data;
+};
+const updateRouteStage = async (
+  routeId: string,
+  routeStageId: string,
+  data: RouteStageFormData,
+  method: "PUT" | "PATCH" = "PATCH"
+) => {
+  const response = await apiFetch<RouteStage>(
+    `/route/${routeId}/stages/${routeStageId}`,
+    {
+      method: method,
+      data,
+    }
+  );
+  return response.data;
+};
+const deleteRouteStage = async (
+  routeStageId: string,
+  routeId: string,
+  method: "DELETE" | "PURGE" = "DELETE"
+) => {
+  const response = await apiFetch<RouteStage>(
+    `/route/${routeId}/stages/${routeStageId}`,
+    {
+      method: method,
+    }
+  );
+  return response.data;
+};
 
 export const useRoutesApi = () => {
   return {
     createRoute,
     updateRoute,
     deleteRoute,
+    createRouteStage,
+    updateRouteStage,
+    deleteRouteStage,
   };
 };

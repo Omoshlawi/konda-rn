@@ -59,6 +59,7 @@ export interface Route {
   endPoint: string;
   distanceKm: number;
   estimatedTimeMin: number;
+  stages?: RouteStage[];
   createdAt: string;
   updatedAt: string;
   voided: boolean;
@@ -71,6 +72,13 @@ export interface Operator {
   createdAt: string;
   updatedAt: string;
   voided: boolean;
+}
+
+export interface RouteStage {
+  id: string;
+  order: number;
+  stage?: Stage;
+  stageId: string;
 }
 
 export interface Fleet {

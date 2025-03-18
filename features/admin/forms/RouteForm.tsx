@@ -1,13 +1,13 @@
-import React, { FC } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Box, Button, TextInput, Text } from "@/components";
-import { RouteSchema } from "../utils/validation";
+import { Box, Button, TextInput } from "@/components";
 import { handleApiErrors, mutate } from "@/lib/api";
 import { showSnackbar } from "@/lib/overlays";
-import { Route, RouteFormData } from "../types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { FC } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ScrollView, StyleSheet } from "react-native";
 import { useRoutesApi } from "../hooks";
+import { Route, RouteFormData } from "../types";
+import { RouteSchema } from "../utils/validation";
 
 type Props = {
   route?: Route;
