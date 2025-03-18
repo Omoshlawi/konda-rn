@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
 import { Route, RouteStage, RouteStageFormData } from "../types";
-import { useRoutesApi, useStages } from "../hooks";
+import { useRoutesApi, useRouteStages, useStages } from "../hooks";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RouteStageschema } from "../utils/validation";
@@ -18,10 +18,11 @@ type Props = {
 const RouteStageForm: FC<Props> = ({ route, onSuccess, routeStage }) => {
   const { createRouteStage, updateRouteStage } = useRoutesApi();
   const { stages } = useStages();
+  const { routeStages } = useRouteStages(route.id);
 
   const form = useForm<RouteStageFormData>({
     defaultValues: {
-      order: routeStage?.order ?? route?.stages?.length,
+      order: routeStage?.order ?? (routeStages?.length ?? 0) + 1,
       routeId: route.id,
       stageId: routeStage?.stageId,
     },
@@ -35,7 +36,7 @@ const RouteStageForm: FC<Props> = ({ route, onSuccess, routeStage }) => {
         ? await updateRouteStage(route.id, routeStage.id, data)
         : await createRouteStage(route.id, data);
       onSuccess?.(res);
-      mutate("/route");
+      mutate(`/route/${route.id}/stages`);
       showSnackbar({
         title: "success",
         subtitle: `Route stage ${
@@ -71,7 +72,7 @@ const RouteStageForm: FC<Props> = ({ route, onSuccess, routeStage }) => {
               label="Order"
               readOnly={disabled}
               onChangeText={onChange}
-              placeholder="Distance in Km"
+              placeholder="e.g 1"
               error={error?.message}
             />
           )}

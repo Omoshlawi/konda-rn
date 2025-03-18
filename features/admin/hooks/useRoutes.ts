@@ -74,8 +74,8 @@ const updateRouteStage = async (
   return response.data;
 };
 const deleteRouteStage = async (
-  routeStageId: string,
   routeId: string,
+  routeStageId: string,
   method: "DELETE" | "PURGE" = "DELETE"
 ) => {
   const response = await apiFetch<RouteStage>(
