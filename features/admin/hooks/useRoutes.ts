@@ -13,6 +13,20 @@ export const useRoutes = () => {
   };
 };
 
+export const useRouteStages = (routeId: string) => {
+  const url = constructUrl(`/route/${routeId}/stages`, {
+    v: "custom:include(stage:include(county,subCounty))",
+  });
+  const { data, isLoading, mutate, error } =
+    useApi<APIFetchResponse<{ results: Array<RouteStage> }>>(url);
+  return {
+    routeStages: data?.data?.results ?? [],
+    isLoading,
+    error,
+    mutate,
+  };
+};
+
 const createRoute = async (data: RouteFormData) => {
   const response = await apiFetch<Route>(`/route`, { method: "POST", data });
   return response.data;

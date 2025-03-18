@@ -19,6 +19,7 @@ import {
   ThemedPageLayout,
   When,
 } from "@/components";
+import { RouteStages } from "../widgets";
 
 const RoutesScreen = () => {
   const theme = useTheme();
@@ -167,6 +168,7 @@ const RoutesScreen = () => {
                           color={"text"}
                         >{`estimate Duration: ${item.estimatedTimeMin} mins`}</Text>
                       </Box>
+                      <RouteStages route={item} />
                     </ExpansionTile>
                   </SwipableAction>
                 )}

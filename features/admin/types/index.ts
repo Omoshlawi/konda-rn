@@ -76,9 +76,13 @@ export interface Operator {
 
 export interface RouteStage {
   id: string;
+  routeId: string;
   order: number;
-  stage?: Stage;
   stageId: string;
+  createdAt: string;
+  updatedAt: string;
+  voided: boolean;
+  stage?:Stage
 }
 
 export interface Fleet {
