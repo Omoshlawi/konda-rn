@@ -45,8 +45,6 @@ const TripSummarycard = () => {
           socketInstance.on(
             "stream_movement",
             (routeName: string, currStage: string, nextStage: string) => {
-              console.log("Hey", routeName, currStage, nextStage);
-
               setRouteName(routeName);
               setCurrentLocation(currStage);
               setNextLocation(nextStage);

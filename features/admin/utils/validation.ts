@@ -58,3 +58,8 @@ export const RoutePricingSchema = z.object({
   timeStart: z.string().min(1, "Required"),
   timeEnd: z.string().min(1, "Required"),
 });
+
+
+export const FleetRouteSchema = z.object({
+  routeId: z.string().min(1, "Required").uuid(),
+});

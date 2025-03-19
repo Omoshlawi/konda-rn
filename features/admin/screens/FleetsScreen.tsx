@@ -16,9 +16,10 @@ import { ConfirmDialog, showDialog, showModal } from "@/lib/overlays";
 import { useTheme } from "@/lib/theme";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { FleetForm } from "../forms";
+import { FleetForm, FleetRouteForm } from "../forms";
 import { useFleet, useFleetApi } from "../hooks";
 import { Fleet } from "../types";
+import { FleetRoutes } from "../widgets";
 
 const FleetsScreen = () => {
   const theme = useTheme();
@@ -34,6 +35,18 @@ const FleetsScreen = () => {
         fleet={fleet}
       />,
       { title: "Add Fleet" }
+    );
+  };
+
+  const handleAddFleetRoute = (fleet: Fleet) => {
+    const dispose = showModal(
+      <FleetRouteForm
+        onSuccess={() => {
+          dispose();
+        }}
+        fleet={fleet}
+      />,
+      { title: "Add Fleet Route" }
     );
   };
 
@@ -92,16 +105,15 @@ const FleetsScreen = () => {
                   <SwipableAction
                     actionButtons={[
                       {
-                        label: "Delete",
-                        onPress: () => handleDelete(item),
-                        backgroundColor: theme.colors.error,
+                        label: "Add Route",
+                        onPress: () => handleAddFleetRoute(item),
+                        backgroundColor: theme.colors.success,
                         labelColor: "white",
-                        accessibilityLabel: "delete fleet",
-                        isLoading: loading,
+                        accessibilityLabel: "Add fleet route",
                         icon: (
                           <ExpoIconComponent
-                            family="FontAwesome"
-                            name="trash"
+                            family="Feather"
+                            name="plus"
                             size={18}
                             color="white"
                           />
@@ -117,6 +129,22 @@ const FleetsScreen = () => {
                           <ExpoIconComponent
                             family="Feather"
                             name="edit"
+                            size={18}
+                            color="white"
+                          />
+                        ),
+                      },
+                      {
+                        label: "Delete",
+                        onPress: () => handleDelete(item),
+                        backgroundColor: theme.colors.error,
+                        labelColor: "white",
+                        accessibilityLabel: "delete fleet",
+                        isLoading: loading,
+                        icon: (
+                          <ExpoIconComponent
+                            family="FontAwesome"
+                            name="trash"
                             size={18}
                             color="white"
                           />
@@ -138,6 +166,7 @@ const FleetsScreen = () => {
                         >{`Capacity: ${item.capacity} `}</Text>
                         <Text color={"text"}>{`Status: ${item.status} `}</Text>
                       </Box>
+                      <FleetRoutes fleet={item} />
                     </ExpansionTile>
                   </SwipableAction>
                 )}

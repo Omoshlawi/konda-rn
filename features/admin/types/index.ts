@@ -1,6 +1,7 @@
 import { ExpoIcon } from "@/components";
-import { z } from "zod";
+import { string, z } from "zod";
 import {
+  FleetRouteSchema,
   FleetSchema,
   OperatorSchema,
   RoutePricingSchema,
@@ -82,7 +83,7 @@ export interface RouteStage {
   createdAt: string;
   updatedAt: string;
   voided: boolean;
-  stage?:Stage
+  stage?: Stage;
 }
 
 export interface Fleet {
@@ -96,6 +97,18 @@ export interface Fleet {
   createdAt: string;
   updatedAt: string;
   voided: boolean;
+  routes?: FleetRoute[];
+}
+
+export interface FleetRoute {
+  id: string;
+  fleetId: string;
+  routeId: string;
+  fleet?: Fleet;
+  route?: Route;
+  createdAt: string;
+  updatedAt: string;
+  voided: boolean;
 }
 
 export type StageFormData = z.infer<typeof StagesShema>;
@@ -104,3 +117,4 @@ export type OperatorFormData = z.infer<typeof OperatorSchema>;
 export type FleetFormData = z.infer<typeof FleetSchema>;
 export type RouteStageFormData = z.infer<typeof RouteStageschema>;
 export type RoutePricingFormData = z.infer<typeof RoutePricingSchema>;
+export type FleetRouteFormData = z.infer<typeof FleetRouteSchema>;
