@@ -22,6 +22,7 @@ const TripSummarycard = () => {
   useEffect(
     function didMount() {
       if (fleetNo) {
+        socket?.disconnect();
         const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
           reconnectionDelayMax: 10000,
         });
@@ -41,13 +42,14 @@ const TripSummarycard = () => {
             title: "Success",
             subtitle: "Succesfully connected to fleet " + fleetNo,
           });
-          socketInstance.emit("stream_movement", fleetNo);
           socketInstance.on(
             "stream_movement",
-            (route: Route, currStage: Stage, nextStage: Stage) => {
-              setRouteName(route.name);
-              setCurrentLocation(currStage?.name);
-              setNextLocation(nextStage.name);
+            (routeName: string, currStage: string, nextStage: string) => {
+              console.log("Hey", routeName, currStage, nextStage);
+
+              setRouteName(routeName);
+              setCurrentLocation(currStage);
+              setNextLocation(nextStage);
             }
           );
         });
