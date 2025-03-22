@@ -22,7 +22,7 @@ const RouteStageForm: FC<Props> = ({ route, onSuccess, routeStage }) => {
 
   const form = useForm<RouteStageFormData>({
     defaultValues: {
-      order: routeStage?.order ?? (routeStages?.length ?? 0) + 1,
+      order: routeStage?.order ?? routeStages?.length ?? 0,
       routeId: route.id,
       stageId: routeStage?.stageId,
     },
@@ -62,6 +62,7 @@ const RouteStageForm: FC<Props> = ({ route, onSuccess, routeStage }) => {
         <Controller
           control={form.control}
           name="order"
+          disabled
           render={({
             field: { onChange, value, disabled },
             fieldState: { error },

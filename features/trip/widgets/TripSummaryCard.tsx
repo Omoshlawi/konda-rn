@@ -35,7 +35,7 @@ const TripSummarycard = () => {
           setConnected(false);
         });
 
-        socketInstance.emit("join", fleetNo);
+        socketInstance.emit("join", fleetNo.toUpperCase());
         socketInstance.on("join", (fleetNo: string) => {
           showSnackbar({
             kind: "success",
@@ -104,7 +104,7 @@ const TripSummarycard = () => {
             style={{ color: Color("white").alpha(0.6).toString() }}
             fontStyle={"italic"}
           >
-            Fleet No. {fleetNo ?? "-"}
+            Fleet No. {fleetNo?.toUpperCase() ?? "-"}
           </Text>
           <Text
             style={{ color: "white" }}

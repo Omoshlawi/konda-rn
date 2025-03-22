@@ -45,8 +45,7 @@ export const RouteStageschema = z.object({
   routeId: z.string().min(1, "Required").uuid(),
   order: z
     .number({ coerce: true })
-    .int()
-    .positive("Must be a positive integer"),
+    .int(),
   stageId: z.string().min(1, "Required").uuid(),
 });
 
