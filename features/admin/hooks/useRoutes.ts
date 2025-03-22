@@ -73,6 +73,19 @@ const updateRouteStage = async (
   );
   return response.data;
 };
+const shiftRouteStage = async (
+  routeId: string,
+  routeStageId: string,
+  direction: "up" | "down"
+) => {
+  const response = await apiFetch<RouteStage>(
+    `/route/${routeId}/stages/${routeStageId}/shift/${direction}`,
+    {
+      method: "PUT",
+    }
+  );
+  return response.data;
+};
 const deleteRouteStage = async (
   routeId: string,
   routeStageId: string,
@@ -95,5 +108,6 @@ export const useRoutesApi = () => {
     createRouteStage,
     updateRouteStage,
     deleteRouteStage,
+    shiftRouteStage,
   };
 };

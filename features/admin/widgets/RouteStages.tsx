@@ -21,7 +21,7 @@ import {
   showSnackbar,
 } from "@/lib/overlays";
 import { RouteStageForm } from "../forms";
-import { mutate } from "@/lib/api";
+import { handleApiErrors, mutate } from "@/lib/api";
 
 type Props = {
   route: Route;
@@ -31,7 +31,7 @@ const Routestages: FC<Props> = ({ route }) => {
   const asyncRouteStages = useRouteStages(route.id);
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
-  const { deleteRouteStage } = useRoutesApi();
+  const { deleteRouteStage, shiftRouteStage } = useRoutesApi();
   const handleEditRouteStage = (routeStage: RouteStage) => {
     const dispose = showModal(
       <RouteStageForm
@@ -43,6 +43,24 @@ const Routestages: FC<Props> = ({ route }) => {
       />,
       { title: "Edit Route stage" }
     );
+  };
+  const handleShift = (routeStage: RouteStage, direction: "up" | "down") => {
+    setLoading(true);
+    shiftRouteStage(route.id, routeStage.id, direction)
+      .then(() => {
+        mutate(`/route/${route.id}/stages`);
+      })
+      .catch((err) => {
+        const errors = handleApiErrors(err);
+        showSnackbar({
+          kind: "error",
+          title: "Error shifting",
+          subtitle: errors.detail,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   const handleDeleteRouteStage = (routeStage: RouteStage) => {
     const dispose = showDialog(
@@ -105,6 +123,36 @@ const Routestages: FC<Props> = ({ route }) => {
               <SwipableAction
                 key={routeStage.id}
                 actionButtons={[
+                  {
+                    label: "Move Up",
+                    onPress: () => handleShift(routeStage, "up"),
+                    backgroundColor: theme.colors.tertiary,
+                    labelColor: "white",
+                    accessibilityLabel: "edit route",
+                    icon: (
+                      <ExpoIconComponent
+                        family="AntDesign"
+                        name="upcircleo"
+                        size={18}
+                        color="white"
+                      />
+                    ),
+                  },
+                  {
+                    label: "Move Down",
+                    onPress: () => handleShift(routeStage, "down"),
+                    backgroundColor: theme.colors.hintColor,
+                    labelColor: "white",
+                    accessibilityLabel: "edit route",
+                    icon: (
+                      <ExpoIconComponent
+                        family="AntDesign"
+                        name="downcircleo"
+                        size={18}
+                        color="white"
+                      />
+                    ),
+                  },
                   {
                     label: "Edit",
                     onPress: () => handleEditRouteStage(routeStage),
