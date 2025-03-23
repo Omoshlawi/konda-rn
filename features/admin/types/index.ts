@@ -109,6 +109,7 @@ export interface FleetRoute {
   createdAt: string;
   updatedAt: string;
   voided: boolean;
+  isActive:boolean
 }
 
 export type StageFormData = z.infer<typeof StagesShema>;

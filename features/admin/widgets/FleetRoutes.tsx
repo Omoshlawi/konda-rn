@@ -32,7 +32,7 @@ const FleetRoutes: FC<Props> = ({ fleet }) => {
   const asyncFleetRoutes = useFleetRoutes(fleet.id);
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
-  const { deleteFleetRoute } = useFleetApi();
+  const { deleteFleetRoute, activateFleetRoute } = useFleetApi();
 
   const handleEditFleetRoute = (fleetRoute: FleetRoute) => {
     const dispose = showModal(
@@ -46,6 +46,33 @@ const FleetRoutes: FC<Props> = ({ fleet }) => {
       { title: "Edit Route Stage" }
     );
   };
+  const handleActivateFleetRoute = (fleetRoute: FleetRoute) => {
+    const dispose = showDialog(
+      <ConfirmDialog
+        title="Confirm Activation"
+        message={`Are you sure you want to activate fleet route ${fleetRoute?.route?.name}?`}
+        onCancel={() => dispose()}
+        onConfirm={() => {
+          setLoading(true);
+          activateFleetRoute(fleet.id, fleetRoute.id)
+            .then(() => {
+              mutate(`/fleet/${fleet.id}/routes`);
+              dispose();
+            })
+            .catch((err) => {
+              showSnackbar({
+                kind: "error",
+                title: "Error Deleting",
+                subtitle: err?.response?.detail,
+              });
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }}
+      />
+    );
+  };
 
   const handleDeleteRouteStage = (fleetRoute: FleetRoute) => {
     const dispose = showDialog(
@@ -57,7 +84,7 @@ const FleetRoutes: FC<Props> = ({ fleet }) => {
           setLoading(true);
           deleteFleetRoute(fleet.id, fleetRoute.id, "PURGE")
             .then(() => {
-              mutate(`/route/${fleet.id}/routes`);
+              mutate(`/fleet/${fleet.id}/routes`);
               dispose();
             })
             .catch((err) => {
@@ -109,11 +136,27 @@ const FleetRoutes: FC<Props> = ({ fleet }) => {
                 key={fleetRoute.id}
                 actionButtons={[
                   {
+                    label: "Activate",
+                    onPress: () => handleActivateFleetRoute(fleetRoute),
+                    backgroundColor: theme.colors.success,
+                    labelColor: "white",
+                    accessibilityLabel: "Edit fleet route",
+                    icon: (
+                      <ExpoIconComponent
+                        family="Feather"
+                        name="check-circle"
+                        size={18}
+                        color="white"
+                      />
+                    ),
+                  },
+                  {
                     label: "Edit",
                     onPress: () => handleEditFleetRoute(fleetRoute),
                     backgroundColor: theme.colors.secondary,
                     labelColor: "white",
-                    accessibilityLabel: "Edit route stage",
+                    accessibilityLabel: "Edit fleet route",
+                    isLoading: loading,
                     icon: (
                       <ExpoIconComponent
                         family="Feather"
@@ -123,12 +166,13 @@ const FleetRoutes: FC<Props> = ({ fleet }) => {
                       />
                     ),
                   },
+
                   {
                     label: "Delete",
                     onPress: () => handleDeleteRouteStage(fleetRoute),
                     backgroundColor: theme.colors.error,
                     labelColor: "white",
-                    accessibilityLabel: "Delete route stage",
+                    accessibilityLabel: "Delete fleet route",
                     isLoading: loading,
                     icon: (
                       <ExpoIconComponent
@@ -142,7 +186,21 @@ const FleetRoutes: FC<Props> = ({ fleet }) => {
                 ]}
               >
                 <ListTile
-                  title={`${fleetRoute.route?.name}`}
+                  leading={
+                    <ExpoIconComponent
+                      family="Feather"
+                      name={fleetRoute.isActive ? "check-circle" : "x-circle"}
+                      size={24}
+                      color={
+                        fleetRoute.isActive
+                          ? theme.colors.success
+                          : theme.colors.error
+                      }
+                    />
+                  }
+                  title={`${fleetRoute.route?.name} - ${
+                    fleetRoute.isActive ? "Active" : "Inactive"
+                  }`}
                   subtitle={`${fleetRoute?.route?.startPoint}, ${fleetRoute?.route?.endPoint}`}
                   borderBottom
                 />

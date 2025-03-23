@@ -73,6 +73,15 @@ const updateFleetRoute = async (
   );
   return response.data;
 };
+const activateFleetRoute = async (fleetId: string, fleetRouteId: string) => {
+  const response = await apiFetch<FleetRoute>(
+    `/fleet/${fleetId}/routes/${fleetRouteId}/activate`,
+    {
+      method: "PUT",
+    }
+  );
+  return response.data;
+};
 const deleteFleetRoute = async (
   fleetId: string,
   fleetRouteId: string,
@@ -94,5 +103,6 @@ export const useFleetApi = () => {
     createFleetRoute,
     updateFleetRoute,
     deleteFleetRoute,
+    activateFleetRoute,
   };
 };
