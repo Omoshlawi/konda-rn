@@ -33,7 +33,7 @@ const TripSummarycard = () => {
     const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
       reconnectionDelayMax: 10000,
       reconnection: true,
-      reconnectionAttempts: 5,
+      reconnectionAttempts: 10,
     });
 
     // Store socket in ref instead of state
@@ -169,9 +169,14 @@ const TripSummarycard = () => {
           position={"absolute"}
           top={theme.spacing.m}
           right={theme.spacing.m}
-          flexDirection={"row"}
+          flexDirection={"row-reverse"}
           alignItems={"center"}
           gap={"s"}
+          borderRadius={"large"}
+          style={{
+            backgroundColor: Color("white").alpha(0.2).toString(),
+            padding: theme.spacing.s * 0.75,
+          }}
         >
           <Box
             width={8}
