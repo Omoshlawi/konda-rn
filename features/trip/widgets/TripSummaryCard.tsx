@@ -16,90 +16,14 @@ import { io, Socket } from "socket.io-client";
 import SearchTrip from "./SearchTrip";
 import { useRouter } from "expo-router";
 import { RoutePaths } from "../utils/constants";
+import useFleetWSInterstageMovement from "../hooks/useFleetWSInterstageMovement";
 
 const TripSummarycard = () => {
-  const [currentLocation, setCurrentLocation] = useState<string>();
-  const [nextLocation, setNextLocation] = useState<string>();
-  const [routeName, setRouteName] = useState<string>();
   const theme = useTheme();
   const [fleetNo, setFleetNo] = useState<string>();
-  const [connected, setConnected] = useState(false);
   const router = useRouter();
-  const socketRef = useRef<Socket | null>(null);
-
-  useEffect(() => {
-    // Only attempt connection if fleetNo exists
-    if (!fleetNo) return;
-
-    // Cleanup previous connection
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-      socketRef.current.removeAllListeners();
-    }
-
-    // Create new socket connection
-    const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
-      reconnectionDelayMax: 10000,
-      reconnection: true,
-      reconnectionAttempts: 10,
-    });
-
-    // Store socket in ref instead of state
-    socketRef.current = socketInstance;
-
-    // Connection status handlers
-    socketInstance.on("connect", () => {
-      setConnected(true);
-      showSnackbar({
-        subtitle: "Socket connected, joining room:" + fleetNo.toUpperCase(),
-        kind: "info",
-      });
-
-      // Join room after connection is established
-      socketInstance.emit("join", fleetNo.toUpperCase());
-    });
-
-    socketInstance.on("disconnect", () => {
-      setConnected(false);
-      showSnackbar({ subtitle: "Socket disconnected", kind: "info" });
-    });
-
-    // Error handling
-    socketInstance.on("connect_error", (error) => {
-      showSnackbar({
-        title: "Connection error:",
-        subtitle: error.message,
-        kind: "error",
-      });
-      setConnected(false);
-    });
-
-    // Join confirmation handler
-    socketInstance.on("join", (joinedFleetNo) => {
-      showSnackbar({
-        kind: "success",
-        title: "Success",
-        subtitle: "Successfully connected to fleet " + joinedFleetNo,
-      });
-    });
-
-    // Data stream handler
-    socketInstance.on("stream_movement", (routeName, currStage, nextStage) => {
-      setRouteName(routeName);
-      setCurrentLocation(currStage);
-      setNextLocation(nextStage);
-    });
-
-    // Cleanup function
-    return () => {
-      console.log("Cleaning up socket connection");
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current.removeAllListeners();
-        socketRef.current = null;
-      }
-    };
-  }, [fleetNo]);
+  const { connected, currentRoute, currentStage, nextStage, socketRef } =
+    useFleetWSInterstageMovement(fleetNo);
   return (
     <Box gap={"s"} mt={"m"}>
       <SearchTrip fleetNo={fleetNo} onChangeFleetNo={setFleetNo} />
@@ -122,14 +46,14 @@ const TripSummarycard = () => {
             fontWeight={"700"}
             variant={"titleLarge"}
           >
-            Current stage: {currentLocation ?? "-"}
+            Current stage: {currentStage?.name ?? "-"}
           </Text>
           <Text
             fontWeight={"700"}
             variant={"bodySmall"}
             style={{ color: Color("white").alpha(0.6).toString() }}
           >
-            Route: {routeName ?? "-"}
+            Route: {currentRoute?.name ?? "-"}
           </Text>
         </Box>
         <QRCode
@@ -152,7 +76,7 @@ const TripSummarycard = () => {
             fontWeight={"700"}
             variant={"bodyLarge"}
           >
-            Next Stage: {nextLocation ?? "-"}
+            Next Stage: {nextStage?.name ?? "-"}
           </Text>
         </Box>
         <Button

@@ -11,9 +11,12 @@ import {
   ExpoIconComponent,
 } from "@/components";
 import { useFleetRoutes, useFleets, useStages } from "@/features/admin/hooks";
+import useFleetWSInterstageMovement from "../hooks/useFleetWSInterstageMovement";
+import { useTheme } from "@/lib/theme";
+import Color from "color";
 
 type Props = {
-  fleetNo: String;
+  fleetNo: string;
 };
 
 const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
@@ -26,6 +29,9 @@ const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
     includeOnlyActiveFleetRoutes: "true",
     v: "custom:include(fleet,route:include(stages:include(stage:include(county,subCounty))))",
   });
+  const { connected, currentStage, nextStage, currentRoute, socketRef } =
+    useFleetWSInterstageMovement(fleetNo);
+  const theme = useTheme();
   return (
     <Box flex={1} gap={"m"} p={"m"}>
       <When
@@ -43,7 +49,7 @@ const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
         )}
         error={(err) => <ErrorState error={err} />}
         success={(data) => {
-          if (!data.length && !data[0].route?.stages?.length)
+          if (!data.length && !data[0]?.route?.stages?.length)
             return (
               <EmptyState
                 message={"No active fleet routes for fleet " + fleetNo}
@@ -55,27 +61,45 @@ const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
           );
           return (
             <>
-              <Text
-                variant={"titleLarge"}
-                textAlign={"center"}
-                fontWeight={"700"}
-                color={"primary"}
+              <Box
+                gap={"m"}
+                style={{
+                  backgroundColor: Color(
+                    connected ? theme.colors.success : theme.colors.error
+                  )
+                    .alpha(0.2)
+                    .toString(),
+                }}
+                p={"m"}
               >
-                {activeFleetRoute.route?.name}
-              </Text>
-              <Text
-                textAlign={"center"}
-                fontWeight={"700"}
-                color={"hintColor"}
-                mb={"s"}
-              >
-                {fleetNo}
-              </Text>
+                <Text
+                  variant={"titleLarge"}
+                  textAlign={"center"}
+                  fontWeight={"700"}
+                  color={"primary"}
+                >
+                  {activeFleetRoute?.route?.name}
+                </Text>
+                <Text
+                  textAlign={"center"}
+                  fontWeight={"700"}
+                  color={"hintColor"}
+                >
+                  {fleetNo}
+                  {currentRoute?.name && `(${currentStage?.name})`}
+                </Text>
+              </Box>
               <FlatList
                 data={stagesInOrder ?? []}
                 keyExtractor={({ id }) => id}
                 renderItem={({ item }) => (
                   <ListTile
+                    containerStyles={{
+                      backgroundColor:
+                        currentStage?.id === item.stageId
+                          ? theme.colors.primary
+                          : undefined,
+                    }}
                     title={`${item.order}. ${item?.stage?.name}`}
                     leading={
                       <ExpoIconComponent family="FontAwesome6" name="bus" />
