@@ -1,14 +1,13 @@
-import { StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
 import { Box, Button, ImageViewer, Text } from "@/components";
-import SearchTrip from "./SearchTrip";
+import { BASE_URL, websocketBaseUrl } from "@/constants";
+import { showSnackbar } from "@/lib/overlays";
 import { useTheme } from "@/lib/theme";
 import Color from "color";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import { BASE_URL, websocketBaseUrl } from "@/constants";
 import { io, Socket } from "socket.io-client";
-import { Route, Stage } from "@/features/admin/types";
-import { showSnackbar } from "@/lib/overlays";
+import SearchTrip from "./SearchTrip";
 
 const TripSummarycard = () => {
   const [currentLocation, setCurrentLocation] = useState<string>();
@@ -16,32 +15,37 @@ const TripSummarycard = () => {
   const [routeName, setRouteName] = useState<string>();
   const theme = useTheme();
   const [fleetNo, setFleetNo] = useState<string>();
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [connected, setConnected] = useState(false);
+
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
     // Only attempt connection if fleetNo exists
     if (!fleetNo) return;
 
     // Cleanup previous connection
-    if (socket) {
-      socket.disconnect();
-      socket.removeAllListeners();
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      socketRef.current.removeAllListeners();
     }
 
     // Create new socket connection
     const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
       reconnectionDelayMax: 10000,
-      reconnection: true, // Ensure reconnection is enabled
-      reconnectionAttempts: 5, // Limit reconnection attempts
+      reconnection: true,
+      reconnectionAttempts: 5,
     });
 
-    setSocket(socketInstance);
+    // Store socket in ref instead of state
+    socketRef.current = socketInstance;
 
     // Connection status handlers
     socketInstance.on("connect", () => {
       setConnected(true);
-      console.log("Socket connected, joining room:", fleetNo.toUpperCase());
+      showSnackbar({
+        subtitle: "Socket connected, joining room:" + fleetNo.toUpperCase(),
+        kind: "info",
+      });
 
       // Join room after connection is established
       socketInstance.emit("join", fleetNo.toUpperCase());
@@ -49,14 +53,14 @@ const TripSummarycard = () => {
 
     socketInstance.on("disconnect", () => {
       setConnected(false);
-      console.log("Socket disconnected");
+      showSnackbar({ subtitle: "Socket disconnected", kind: "info" });
     });
 
     // Error handling
     socketInstance.on("connect_error", (error) => {
       showSnackbar({
         title: "Connection error:",
-        subtitle: error?.message,
+        subtitle: error.message,
         kind: "error",
       });
       setConnected(false);
@@ -64,7 +68,6 @@ const TripSummarycard = () => {
 
     // Join confirmation handler
     socketInstance.on("join", (joinedFleetNo) => {
-      console.log("Joined fleet:", joinedFleetNo);
       showSnackbar({
         kind: "success",
         title: "Success",
@@ -82,9 +85,10 @@ const TripSummarycard = () => {
     // Cleanup function
     return () => {
       console.log("Cleaning up socket connection");
-      if (socketInstance) {
-        socketInstance.disconnect();
-        socketInstance.removeAllListeners();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current.removeAllListeners();
+        socketRef.current = null;
       }
     };
   }, [fleetNo]);
