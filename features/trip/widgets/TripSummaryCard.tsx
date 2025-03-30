@@ -19,46 +19,75 @@ const TripSummarycard = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [connected, setConnected] = useState(false);
 
-  useEffect(
-    function didMount() {
-      if (fleetNo) {
-        socket?.disconnect();
-        const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
-          reconnectionDelayMax: 10000,
-        });
-        setSocket(socketInstance); // Store socket instance in state
-        socketInstance.io.on("open", () => setConnected(true));
-        socketInstance.io.on("close", () => {
-          setRouteName(undefined);
-          setCurrentLocation(undefined);
-          setNextLocation(undefined);
-          setConnected(false);
-        });
+  useEffect(() => {
+    // Only attempt connection if fleetNo exists
+    if (!fleetNo) return;
 
-        socketInstance.emit("join", fleetNo.toUpperCase());
-        socketInstance.on("join", (fleetNo: string) => {
-          showSnackbar({
-            kind: "success",
-            title: "Success",
-            subtitle: "Succesfully connected to fleet " + fleetNo,
-          });
-          socketInstance.on(
-            "stream_movement",
-            (routeName: string, currStage: string, nextStage: string) => {
-              setRouteName(routeName);
-              setCurrentLocation(currStage);
-              setNextLocation(nextStage);
-            }
-          );
-        });
-        return function didUnmount() {
-          socketInstance.disconnect();
-          socketInstance.removeAllListeners();
-        };
+    // Cleanup previous connection
+    if (socket) {
+      socket.disconnect();
+      socket.removeAllListeners();
+    }
+
+    // Create new socket connection
+    const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
+      reconnectionDelayMax: 10000,
+      reconnection: true, // Ensure reconnection is enabled
+      reconnectionAttempts: 5, // Limit reconnection attempts
+    });
+
+    setSocket(socketInstance);
+
+    // Connection status handlers
+    socketInstance.on("connect", () => {
+      setConnected(true);
+      console.log("Socket connected, joining room:", fleetNo.toUpperCase());
+
+      // Join room after connection is established
+      socketInstance.emit("join", fleetNo.toUpperCase());
+    });
+
+    socketInstance.on("disconnect", () => {
+      setConnected(false);
+      console.log("Socket disconnected");
+    });
+
+    // Error handling
+    socketInstance.on("connect_error", (error) => {
+      showSnackbar({
+        title: "Connection error:",
+        subtitle: error?.message,
+        kind: "error",
+      });
+      setConnected(false);
+    });
+
+    // Join confirmation handler
+    socketInstance.on("join", (joinedFleetNo) => {
+      console.log("Joined fleet:", joinedFleetNo);
+      showSnackbar({
+        kind: "success",
+        title: "Success",
+        subtitle: "Successfully connected to fleet " + joinedFleetNo,
+      });
+    });
+
+    // Data stream handler
+    socketInstance.on("stream_movement", (routeName, currStage, nextStage) => {
+      setRouteName(routeName);
+      setCurrentLocation(currStage);
+      setNextLocation(nextStage);
+    });
+
+    // Cleanup function
+    return () => {
+      console.log("Cleaning up socket connection");
+      if (socketInstance) {
+        socketInstance.disconnect();
+        socketInstance.removeAllListeners();
       }
-    },
-    [fleetNo]
-  );
+    };
+  }, [fleetNo]);
   return (
     <Box gap={"s"} mt={"m"}>
       <SearchTrip fleetNo={fleetNo} onChangeFleetNo={setFleetNo} />
