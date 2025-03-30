@@ -13,6 +13,18 @@ export const useRoutes = () => {
   };
 };
 
+export const useRoute = (routeId: string, params: Record<string, any> = {}) => {
+  const url = constructUrl(`/route/${routeId}`, params);
+  const { data, isLoading, mutate, error } =
+    useApi<APIFetchResponse<{ results: Array<Route> }>>(url);
+  return {
+    routes: data?.data?.results ?? [],
+    isLoading,
+    error,
+    mutate,
+  };
+};
+
 export const useRouteStages = (routeId: string) => {
   const url = constructUrl(`/route/${routeId}/stages`, {
     v: "custom:include(stage:include(county,subCounty))",

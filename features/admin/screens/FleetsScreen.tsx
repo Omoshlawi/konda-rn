@@ -17,13 +17,13 @@ import { useTheme } from "@/lib/theme";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { FleetForm, FleetRouteForm } from "../forms";
-import { useFleet, useFleetApi } from "../hooks";
+import { useFleets, useFleetApi } from "../hooks";
 import { Fleet } from "../types";
 import { FleetRoutes } from "../widgets";
 
 const FleetsScreen = () => {
   const theme = useTheme();
-  const fleetsAsync = useFleet();
+  const fleetsAsync = useFleets();
   const [loading, setLoading] = useState(false);
   const { deleteFleet } = useFleetApi();
   const handleAddOrEditFleet = (fleet?: Fleet) => {

@@ -27,12 +27,12 @@ const RouteMovementScreen = () => {
         routes={[
           {
             key: "list",
-            title: "Routes",
+            title: "List view",
             icon: { family: "FontAwesome6", name: "list" },
           },
           {
             key: "map",
-            title: "Map",
+            title: "Map view",
             icon: { family: "FontAwesome6", name: "map-location-dot" },
           },
         ]}
@@ -40,8 +40,8 @@ const RouteMovementScreen = () => {
           <ExpoIconComponent size={20} color={color} {...icon} />
         )}
         scenes={{
-          list: () => <RouteStagesListingView />,
-          map: () => <RouteStagesMapView />,
+          list: () => <RouteStagesListingView fleetNo={params.fleetNo} />,
+          map: () => <RouteStagesMapView fleetNo={params.fleetNo}/>,
         }}
       />
     </ThemedPageLayout>

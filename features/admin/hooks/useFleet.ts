@@ -1,8 +1,8 @@
 import { apiFetch, APIFetchResponse, constructUrl, useApi } from "@/lib/api";
 import { Fleet, FleetFormData, FleetRoute, FleetRouteFormData } from "../types";
 
-export const useFleet = () => {
-  const url = constructUrl(`/fleet`);
+export const useFleets = (params: Record<string, any> = {}) => {
+  const url = constructUrl(`/fleet`, params);
   const { data, error, mutate, isLoading } =
     useApi<APIFetchResponse<{ results: Array<Fleet> }>>(url);
   return {
@@ -13,12 +13,17 @@ export const useFleet = () => {
   };
 };
 
-export const useFleetRoutes = (fleetId: string) => {
+export const useFleetRoutes = (
+  fleetId?: string,
+  params?: Record<string, any>
+) => {
   const url = constructUrl(`/fleet/${fleetId}/routes`, {
     v: "custom:include(fleet,route)",
+    ...params,
   });
-  const { data, error, isLoading, mutate } =
-    useApi<APIFetchResponse<{ results: Array<FleetRoute> }>>(url);
+  const { data, error, isLoading, mutate } = useApi<
+    APIFetchResponse<{ results: Array<FleetRoute> }>
+  >(fleetId ? url : null);
   return {
     isLoading,
     error,
