@@ -1,4 +1,10 @@
-import { Box, Button, ImageViewer, Text } from "@/components";
+import {
+  Box,
+  Button,
+  ExpoIconComponent,
+  ImageViewer,
+  Text,
+} from "@/components";
 import { BASE_URL, websocketBaseUrl } from "@/constants";
 import { showSnackbar } from "@/lib/overlays";
 import { useTheme } from "@/lib/theme";
@@ -8,6 +14,8 @@ import { StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { io, Socket } from "socket.io-client";
 import SearchTrip from "./SearchTrip";
+import { useRouter } from "expo-router";
+import { RoutePaths } from "../utils/constants";
 
 const TripSummarycard = () => {
   const [currentLocation, setCurrentLocation] = useState<string>();
@@ -16,7 +24,7 @@ const TripSummarycard = () => {
   const theme = useTheme();
   const [fleetNo, setFleetNo] = useState<string>();
   const [connected, setConnected] = useState(false);
-
+  const router = useRouter();
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
@@ -148,8 +156,17 @@ const TripSummarycard = () => {
           </Text>
         </Box>
         <Button
-          title="Full route"
+          title="View route"
+          iconLeading
           underlayColor={Color(theme.colors.primary).darken(0.1).toString()}
+          renderIcon={({ size, color }) => (
+            <ExpoIconComponent
+              family="FontAwesome6"
+              name="map-location-dot"
+              size={size}
+              color={"white"}
+            />
+          )}
           style={{
             width: "auto",
             position: "absolute",
@@ -163,7 +180,16 @@ const TripSummarycard = () => {
             color: "white",
           }}
           variant="tertiary"
-          onPress={() => {}}
+          onPress={
+            fleetNo
+              ? () => {
+                  router.push({
+                    pathname: RoutePaths.ROUTE_MOVEMENT_SCREEN,
+                    params: { fleetNo: fleetNo.toUpperCase() },
+                  });
+                }
+              : undefined
+          }
         />
         <Box
           position={"absolute"}

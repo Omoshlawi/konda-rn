@@ -7,7 +7,7 @@ import "react-native-reanimated";
 
 import { useLoadInitialAuthState } from "@/features/auth/hooks";
 import { ApiConfigProvider } from "@/lib/api";
-import { useUserPreferedTheme, useUserPreferenceStore } from "@/lib/global-store";
+import { useUserPreferedTheme } from "@/lib/global-store";
 import { OverlayPortal } from "@/lib/overlays";
 import { ThemeProvider } from "@/lib/theme";
 
@@ -39,6 +39,7 @@ export default function RootLayout() {
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(drawer)" />
             <Stack.Screen name="admin" />
+            <Stack.Screen name="(trip)" />
             <Stack.Screen name="notifications" />
             <Stack.Screen name="(authentication)" />
             <Stack.Screen name="+not-found" />

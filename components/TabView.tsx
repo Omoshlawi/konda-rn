@@ -1,49 +1,61 @@
+import { useTheme } from "@/lib/theme";
 import React from "react";
 import {
   StyleProp,
   StyleSheet,
   TextStyle,
-  View,
   ViewStyle,
   useWindowDimensions,
 } from "react-native";
-import { TabView as RNTabView, SceneMap, TabBar } from "react-native-tab-view";
-import Text from "./Text";
-import { useTheme } from "@/lib/theme";
-type Route = {
-  key: string;
-  title: string;
-  icon?: React.ReactNode;
-  badgeCount?: number;
-};
+import {
+  TabView as RNTabView,
+  Route,
+  SceneMap,
+  TabBar,
+} from "react-native-tab-view";
 
-type RenderIconProps = {
-  route: Route;
+type RenderIconProps<T> = {
+  route: T;
   focused: boolean;
   color: string;
+  size: number;
 };
 
-type TabViewProps = {
-  routes: Route[];
+type RenderBadgeProps<T> = {
+  route: T;
+};
+
+type RenderLabelProps<T> = {
+  route: T;
+  labelText?: string;
+  focused: boolean;
+  color: string;
+  allowFontScaling?: boolean;
+  style?: StyleProp<TextStyle>;
+};
+
+type TabViewProps<T> = {
+  routes: T[];
   scenes: { [key: string]: React.ComponentType<any> };
   tabBarStyle?: StyleProp<ViewStyle>;
   tabBarLabelStyle?: StyleProp<TextStyle>;
   indicatorStyle?: StyleProp<ViewStyle>;
-  renderIcon?: (props: RenderIconProps) => React.ReactNode;
+  renderIcon?: (props: RenderIconProps<T>) => React.ReactNode;
   activeColor?: string;
   inactiveColor?: string;
   pressColor?: string;
-  renderBadge?: (route: Route) => React.ReactNode;
-  renderLabel?: (props: {
-    route: Route;
-    focused: boolean;
-    color: string;
-  }) => React.ReactNode;
-  renderTabBar?: (props: any) => React.ReactNode;
+  renderBadge?: (route: RenderBadgeProps<T>) => React.ReactElement;
+  renderLabel?: (props: RenderLabelProps<T>) => React.ReactNode;
   onIndexChange?: (index: number) => void;
+  accessibilityLabel?: string;
 };
 
-const TabView: React.FC<TabViewProps> = ({
+const TabView = <
+  T extends Pick<
+    Route,
+    "accessibilityLabel" | "accessible" | "key" | "testID" | "title"
+  >
+>({
   routes = [],
   scenes,
   tabBarStyle,
@@ -55,9 +67,9 @@ const TabView: React.FC<TabViewProps> = ({
   pressColor,
   renderBadge,
   renderLabel,
-  renderTabBar: customRenderTabBar,
   onIndexChange,
-}) => {
+  accessibilityLabel,
+}: TabViewProps<T>) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const theme = useTheme();
@@ -69,85 +81,42 @@ const TabView: React.FC<TabViewProps> = ({
     onIndexChange?.(newIndex);
   };
 
-  const defaultRenderIcon = ({ route, focused, color }: RenderIconProps) => {
-    if (route.icon) {
-      return (
-        <View style={styles.iconContainer}>
-          {React.isValidElement(route.icon)
-            ? React.cloneElement(route.icon as React.ReactElement, { color })
-            : route.icon}
-        </View>
-      );
-    }
-    return null;
-  };
-
-  const defaultRenderLabel = ({
-    route,
-    focused,
-    color,
-  }: {
-    route: Route;
-    focused: boolean;
-    color: string;
-  }) => (
-    <View style={styles.labelContainer}>
-      {renderLabel ? (
-        renderLabel({ route, focused, color })
-      ) : (
-        <View>
-          {route.title && (
-            <View style={styles.titleContainer}>
-              <View style={styles.title}>
-                {typeof route.title === "string" ? (
-                  <Text style={[styles.label, tabBarLabelStyle, { color }]}>
-                    {route.title}
-                  </Text>
-                ) : (
-                  route.title
-                )}
-              </View>
-              {renderBadge && renderBadge(route)}
-            </View>
-          )}
-        </View>
-      )}
-    </View>
-  );
-
-  const renderTabBar =
-    customRenderTabBar ||
-    ((props: any) => (
-      <TabBar
-        {...props}
-        style={[
-          styles.tabBar,
-          { backgroundColor: theme.colors.background },
-          tabBarStyle,
-        ]}
-        renderIcon={renderIcon || defaultRenderIcon}
-        renderLabel={defaultRenderLabel}
-        indicatorStyle={[
-          styles.indicator,
-          { backgroundColor: theme.colors.primary },
-          indicatorStyle,
-        ]}
-        activeColor={defaultActiveColor}
-        inactiveColor={defaultInactiveColor}
-        pressColor={defaultPressColor}
-      />
-    ));
-
   return (
-    <RNTabView
+    <RNTabView<T>
       navigationState={{
         index,
-        routes: routes.map((r) => ({ key: r.key, title: r.title })),
+        routes,
       }}
       renderScene={SceneMap(scenes)}
       onIndexChange={handleIndexChange}
       initialLayout={{ width: layout.width }}
-      renderTabBar={renderTabBar}
+      renderTabBar={(props) => (
+        <TabBar<T>
+          {...props}
+          style={[
+            styles.tabBar,
+            { backgroundColor: theme.colors.background },
+            tabBarStyle,
+          ]}
+          indicatorStyle={[
+            styles.indicator,
+            { backgroundColor: theme.colors.primary },
+            indicatorStyle,
+          ]}
+          activeColor={defaultActiveColor}
+          inactiveColor={defaultInactiveColor}
+          pressColor={defaultPressColor}
+          
+        />
+      )}
+      commonOptions={{
+        icon: renderIcon,
+        badge: renderBadge,
+        accessible: true,
+        accessibilityLabel,
+        label: renderLabel,
+      }}
+      lazy
     />
   );
 };
