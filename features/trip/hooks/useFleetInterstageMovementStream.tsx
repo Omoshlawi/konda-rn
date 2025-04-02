@@ -3,7 +3,7 @@ import { showSnackbar } from "@/lib/overlays";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
-const useFleetWSInterstageMovement = (fleetNo?: string) => {
+const useFleetInterstageMovementStream = (fleetNo?: string) => {
   const [connected, setConnected] = useState(false);
 
   const socketRef = useRef<Socket | null>(null);
@@ -30,7 +30,7 @@ const useFleetWSInterstageMovement = (fleetNo?: string) => {
     }
 
     // Create new socket connection
-    const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet`, {
+    const socketInstance = io(`${BASE_URL}${websocketBaseUrl}/fleet-movement`, {
       reconnectionDelayMax: 10000,
       reconnection: true,
       reconnectionAttempts: 10,
@@ -94,7 +94,6 @@ const useFleetWSInterstageMovement = (fleetNo?: string) => {
 
     // Cleanup function
     return () => {
-      console.log("Cleaning up socket connection");
       if (socketRef.current) {
         socketRef.current.disconnect();
         socketRef.current.removeAllListeners();
@@ -111,4 +110,4 @@ const useFleetWSInterstageMovement = (fleetNo?: string) => {
   };
 };
 
-export default useFleetWSInterstageMovement;
+export default useFleetInterstageMovementStream;

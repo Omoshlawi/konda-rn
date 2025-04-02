@@ -5,25 +5,22 @@ import {
   ImageViewer,
   Text,
 } from "@/components";
-import { BASE_URL, websocketBaseUrl } from "@/constants";
-import { showSnackbar } from "@/lib/overlays";
 import { useTheme } from "@/lib/theme";
 import Color from "color";
-import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import { io, Socket } from "socket.io-client";
-import SearchTrip from "./SearchTrip";
-import { useRouter } from "expo-router";
+import { useFleetInterstageMovementStream } from "../hooks";
 import { RoutePaths } from "../utils/constants";
-import useFleetWSInterstageMovement from "../hooks/useFleetWSInterstageMovement";
+import SearchTrip from "./SearchTrip";
 
 const TripSummarycard = () => {
   const theme = useTheme();
   const [fleetNo, setFleetNo] = useState<string>();
   const router = useRouter();
   const { connected, currentRoute, currentStage, nextStage, socketRef } =
-    useFleetWSInterstageMovement(fleetNo);
+    useFleetInterstageMovementStream(fleetNo);
   return (
     <Box gap={"s"} mt={"m"}>
       <SearchTrip fleetNo={fleetNo} onChangeFleetNo={setFleetNo} />

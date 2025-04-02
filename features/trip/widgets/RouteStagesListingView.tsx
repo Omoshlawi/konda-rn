@@ -13,7 +13,7 @@ import { useTheme } from "@/lib/theme";
 import Color from "color";
 import React, { FC } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { useFleetWSInterstageMovement } from "../hooks";
+import { useFleetInterstageMovementStream } from "../hooks";
 
 type Props = {
   fleetNo: string;
@@ -30,7 +30,7 @@ const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
     v: "custom:include(fleet,route:include(stages:include(stage:include(county,subCounty))))",
   });
   const { connected, currentStage, nextStage, currentRoute, socketRef } =
-    useFleetWSInterstageMovement(fleetNo);
+    useFleetInterstageMovementStream(fleetNo);
   const theme = useTheme();
   return (
     <Box flex={1} gap={"m"} p={"m"}>

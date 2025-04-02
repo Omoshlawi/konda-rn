@@ -49,7 +49,7 @@ const RouteStagesMapView: FC<Props> = ({ fleetNo }) => {
             );
           const activeFleetRoute = data[0];
 
-          return <RouteMap fleetRoute={activeFleetRoute} />;
+          return <RouteMap fleetRoute={activeFleetRoute} fleetNo={fleetNo} />;
         }}
       />
     </Box>
