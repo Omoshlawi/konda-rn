@@ -1,19 +1,19 @@
-import { FlatList, StyleSheet } from "react-native";
-import React, { FC } from "react";
 import {
   Box,
-  ErrorState,
-  ListTileSkeleton,
-  When,
-  Text,
   EmptyState,
-  ListTile,
+  ErrorState,
   ExpoIconComponent,
+  ListTile,
+  ListTileSkeleton,
+  Text,
+  When,
 } from "@/components";
-import { useFleetRoutes, useFleets, useStages } from "@/features/admin/hooks";
-import useFleetWSInterstageMovement from "../hooks/useFleetWSInterstageMovement";
+import { useFleetRoutes, useFleets } from "@/features/admin/hooks";
 import { useTheme } from "@/lib/theme";
 import Color from "color";
+import React, { FC } from "react";
+import { FlatList, StyleSheet } from "react-native";
+import { useFleetWSInterstageMovement } from "../hooks";
 
 type Props = {
   fleetNo: string;

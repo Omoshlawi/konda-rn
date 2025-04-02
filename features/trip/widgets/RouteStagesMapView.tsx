@@ -1,16 +1,16 @@
-import { StyleSheet } from "react-native";
-import React, { FC } from "react";
 import {
   Box,
   EmptyState,
   ErrorState,
   ListTileSkeleton,
   When,
-  Text,
 } from "@/components";
 import { useFleetRoutes, useFleets } from "@/features/admin/hooks";
+import React, { FC } from "react";
+import { StyleSheet } from "react-native";
+import RouteMap from "./RouteMap";
 type Props = {
-  fleetNo: String;
+  fleetNo: string;
 };
 
 const RouteStagesMapView: FC<Props> = ({ fleetNo }) => {
@@ -21,8 +21,9 @@ const RouteStagesMapView: FC<Props> = ({ fleetNo }) => {
   } = useFleets({ name: fleetNo });
   const stagesAsync = useFleetRoutes(fleets[0]?.id, {
     includeOnlyActiveFleetRoutes: "true",
-    v: "custom:include(fleet,route:include(stages:include(stage)))",
+    v: "custom:include(fleet,route:include(stages:include(stage:include(county,subCounty))))",
   });
+
   return (
     <Box flex={1} gap={"m"}>
       <When
@@ -47,10 +48,8 @@ const RouteStagesMapView: FC<Props> = ({ fleetNo }) => {
               />
             );
           const activeFleetRoute = data[0];
-          const stagesInOrder = activeFleetRoute?.route?.stages?.sort(
-            (a, b) => a.order - b.order
-          );
-          return <></>;
+
+          return <RouteMap fleetRoute={activeFleetRoute} />;
         }}
       />
     </Box>
@@ -59,4 +58,9 @@ const RouteStagesMapView: FC<Props> = ({ fleetNo }) => {
 
 export default RouteStagesMapView;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+});
