@@ -20,6 +20,11 @@
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE"
       ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCQVOAQW36FpGPPYYDJMc0_N257RuXh76s"
+        }
+      },
       "package": "ke.co.vstech.konda"
     },
     "web": {
