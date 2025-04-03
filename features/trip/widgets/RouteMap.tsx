@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { FC, useEffect, useMemo, useRef } from "react";
 import { FleetRoute } from "@/features/admin/types";
-import MapView, { Marker, UrlTile, PROVIDER_GOOGLE } from "react-native-maps";
-import { useFleetGPSStream } from "../hooks";
-import { ImageViewer } from "@/components";
 import { useUserPreferedTheme } from "@/lib/global-store";
+import React, { FC, useEffect, useMemo, useRef } from "react";
+import { Platform, StyleSheet } from "react-native";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { useFleetGPSStream } from "../hooks";
 
 type Props = {
   fleetRoute: FleetRoute;
@@ -42,7 +41,7 @@ const RouteMap: FC<Props> = ({ fleetRoute, fleetNo }) => {
     <MapView
       style={styles.map}
       ref={mapRef}
-      provider={PROVIDER_GOOGLE}
+      provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
       customMapStyle={
         theme === "dark" ? darkMapStyle : lightMapStyle //minimalMapStyle
       }
@@ -63,13 +62,7 @@ const RouteMap: FC<Props> = ({ fleetRoute, fleetNo }) => {
           description={`${stage.stage?.county?.name || "Unknown County"}, ${
             stage.stage?.subCounty?.name || "Unknown Subcounty"
           }`}
-        >
-          <ImageViewer
-            source={require("@/assets/images/stage.png")}
-            style={styles.marker}
-            contentFit="contain"
-          />
-        </Marker>
+        />
       ))}
       {currentLocation && (
         <Marker
@@ -79,13 +72,8 @@ const RouteMap: FC<Props> = ({ fleetRoute, fleetNo }) => {
           }}
           title={`Current location`}
           description={`Current location`}
-        >
-          <ImageViewer
-            source={require("@/assets/images/marker.png")}
-            style={styles.marker}
-            contentFit="contain"
-          />
-        </Marker>
+          pinColor="green"
+        />
       )}
     </MapView>
   );
