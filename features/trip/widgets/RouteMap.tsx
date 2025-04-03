@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { FC, useEffect, useMemo, useRef } from "react";
 import { FleetRoute } from "@/features/admin/types";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, UrlTile } from "react-native-maps";
 import { useFleetGPSStream } from "../hooks";
 import { ImageViewer } from "@/components";
+import { useUserPreferedTheme } from "@/lib/global-store";
 
 type Props = {
   fleetRoute: FleetRoute;
@@ -12,11 +13,12 @@ type Props = {
 
 const RouteMap: FC<Props> = ({ fleetRoute, fleetNo }) => {
   const mapRef = useRef<MapView>(null);
+  const theme = useUserPreferedTheme();
   const stagesInOrder = useMemo(
     () => (fleetRoute.route?.stages ?? [])?.sort((a, b) => a.order - b.order),
     [fleetRoute]
   );
-  const {  currentLocation } = useFleetGPSStream(fleetNo);
+  const { currentLocation } = useFleetGPSStream(fleetNo);
   const points = useMemo<Array<{ latitude: number; longitude: number }>>(
     () =>
       stagesInOrder.length > 0
@@ -37,7 +39,21 @@ const RouteMap: FC<Props> = ({ fleetRoute, fleetNo }) => {
   }, [points]);
 
   return (
-    <MapView style={styles.map} ref={mapRef}>
+    <MapView
+      style={styles.map}
+      ref={mapRef}
+      customMapStyle={
+        /*theme === "dark" ? darkMapStyle : lightMapStyle*/ minimalMapStyle
+      }
+    >
+      <UrlTile
+        // urlTemplate={"http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+        // urlTemplate={"https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+        urlTemplate={"https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+        // urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        maximumZ={19}
+        flipY={false}
+      />
       {stagesInOrder?.map((stage, index) => (
         <Marker
           key={index}
@@ -86,3 +102,29 @@ const styles = StyleSheet.create({
     width: 60,
   },
 });
+
+const minimalMapStyle = [
+  { featureType: "poi", stylers: [{ visibility: "off" }] }, // Hide Points of Interest
+  { featureType: "transit", stylers: [{ visibility: "off" }] }, // Hide Public Transport
+  //   { featureType: "road", stylers: [{ visibility: "simplified" }] }, // Simplify Roads
+  { featureType: "administrative", stylers: [{ visibility: "off" }] }, // Hide Admin Boundaries
+  //   { featureType: "landscape", stylers: [{ visibility: "simplified" }] }, // Simplify Landscapes
+  //   { featureType: "water", stylers: [{ color: "#d4e4e6" }] }, // Light Blue Water
+];
+
+// Light Theme Map Style
+const lightMapStyle = [
+  { featureType: "poi", stylers: [{ visibility: "off" }] },
+  { featureType: "transit", stylers: [{ visibility: "off" }] },
+  { featureType: "road", stylers: [{ visibility: "simplified" }] },
+  { featureType: "water", stylers: [{ color: "#d4e4e6" }] },
+];
+
+// Dark Theme Map Style
+const darkMapStyle = [
+  { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+  { featureType: "road", stylers: [{ color: "#38414e" }] },
+  { featureType: "water", stylers: [{ color: "#17263c" }] },
+];
