@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "ke.co.vstech.konda"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +26,7 @@
           "apiKey": "AIzaSyCQVOAQW36FpGPPYYDJMc0_N257RuXh76s"
         }
       },
+      "googleServicesFile": "./google-services.json",
       "package": "ke.co.vstech.konda"
     },
     "web": {

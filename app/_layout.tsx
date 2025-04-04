@@ -10,6 +10,12 @@ import { ApiConfigProvider } from "@/lib/api";
 import { useUserPreferedTheme } from "@/lib/global-store";
 import { OverlayPortal } from "@/lib/overlays";
 import { ThemeProvider } from "@/lib/theme";
+import {
+  configureNotificationHandler,
+  NotificationProvider,
+} from "@/lib/notification";
+
+configureNotificationHandler();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -35,15 +41,18 @@ export default function RootLayout() {
     <ThemeProvider>
       <ApiConfigProvider>
         <OverlayPortal>
-          <StatusBar style={theme == "dark" ? "light" : "dark"} />
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(drawer)" />
-            <Stack.Screen name="admin" />
-            <Stack.Screen name="(trip)" />
-            <Stack.Screen name="notifications" />
-            <Stack.Screen name="(authentication)" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
+          {/* SHOULE BE INSIDE OVERLAY PORTAL TO ALLOW ACCESS AND USE OF SNACK BAR,MODALS,ETC FOR ERROR HANDLING OR INFORMATION DISPLAY IF ERROR OCCURED */}
+          <NotificationProvider>
+            <StatusBar style={theme == "dark" ? "light" : "dark"} />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(drawer)" />
+              <Stack.Screen name="admin" />
+              <Stack.Screen name="(trip)" />
+              <Stack.Screen name="notifications" />
+              <Stack.Screen name="(authentication)" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </NotificationProvider>
         </OverlayPortal>
       </ApiConfigProvider>
     </ThemeProvider>

@@ -1,17 +1,18 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { Box, IconButton, Text, ThemedPageLayout } from "@/components";
+import { UpcomingNotifications } from "@/features/notification/widgets";
 import { TripSummaryCard } from "@/features/trip/widgets";
+import { useSession } from "@/lib/global-store";
 import { useTheme } from "@/lib/theme";
 import { useNavigation, useRouter } from "expo-router";
-import { useSession } from "@/lib/global-store";
-import { UpcomingNotifications } from "@/features/notification/widgets";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const router = useRouter();
   const theme = useTheme();
   const { user } = useSession();
+
   return (
     <ThemedPageLayout>
       <Box
