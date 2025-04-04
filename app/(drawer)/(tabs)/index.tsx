@@ -5,6 +5,7 @@ import { TripSummaryCard } from "@/features/trip/widgets";
 import { useTheme } from "@/lib/theme";
 import { useNavigation, useRouter } from "expo-router";
 import { useSession } from "@/lib/global-store";
+import { UpcomingNotifications } from "@/features/notification/widgets";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -56,12 +57,9 @@ export default function HomeScreen() {
           {new Date().toDateString()}
         </Text>
       </Box>
-      <Box px={"l"}>
-        <ScrollView>
-          <Box gap={"m"} mt={"l"}>
-            <TripSummaryCard />
-          </Box>
-        </ScrollView>
+      <Box px={"l"} flex={1} gap={"m"}>
+        <TripSummaryCard />
+        <UpcomingNotifications />
       </Box>
     </ThemedPageLayout>
   );
