@@ -1,11 +1,13 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
-import { Box, Button, ErrorState, Text } from "@/components";
+import { Box, ErrorState, Text } from "@/components";
 import { useNotification } from "@/lib/notification";
+import { useTheme } from "@/lib/theme";
+import React from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import QRCode from "react-native-qrcode-svg";
 
 const UpcomingNotifications = () => {
   const { error, expoPushToken, notification } = useNotification();
-
+  const theme = useTheme();
   if (error)
     return (
       <ErrorState
@@ -24,6 +26,15 @@ const UpcomingNotifications = () => {
       <Text color={"success"}>
         {JSON.stringify(notification?.request.content.data, null, 2)}
       </Text>
+      <QRCode
+        value={JSON.stringify({
+          data: notification?.request.content.data,
+          expoPushToken,
+        })}
+        size={55}
+        backgroundColor={theme.colors.primary}
+        color={"white"}
+      />
     </Box>
   );
 };
