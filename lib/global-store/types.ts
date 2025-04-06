@@ -10,6 +10,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   person: Person;
+  expoPushToken?: string;
 }
 
 export interface Person {

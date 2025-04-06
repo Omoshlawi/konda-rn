@@ -19,7 +19,9 @@ const UpcomingNotifications = () => {
   return (
     <Box flex={1} backgroundColor={"background"}>
       <Box flexDirection={"row"} justifyContent={"space-between"} pr={"s"}>
-        <Text fontWeight={"700"}>Upcoming Notifications</Text>
+        <Text fontWeight={"700"} color={"text"}>
+          Upcoming Notifications
+        </Text>
         <TouchableOpacity activeOpacity={0.5}>
           <Text color={"primary"}>Schedule Reminder</Text>
         </TouchableOpacity>

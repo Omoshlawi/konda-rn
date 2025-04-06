@@ -60,6 +60,14 @@ const getSessionUserByToken = async (token: string) => {
   return responseData;
 };
 
+const updatesessionUserPushToken = async (token: string) => {
+  const resp = await apiFetch<User>(`/users/push-token`, {
+    data: { expoPushToken: token },
+    method: "PUT",
+  });
+  return resp.data;
+};
+
 const logoutUser = () => {
   useSessionStore.setState((state) => ({
     ...state,
@@ -91,5 +99,6 @@ export const useAuthAPi = () => {
       logoutUser();
       setToken(null);
     },
+    updatesessionUserPushToken,
   };
 };

@@ -10,6 +10,10 @@ import React, {
 import * as Notifications from "expo-notifications";
 import { EventSubscription } from "expo-modules-core";
 import registerForPushNotificationsAsync from "./registerForPushNotificationsAsync";
+import { useSession } from "../global-store";
+import { useAuthAPi } from "@/features/auth/hooks";
+import { showSnackbar } from "../overlays";
+import { handleApiErrors } from "../api";
 
 interface NotificationContextType {
   expoPushToken: string | null;
@@ -35,6 +39,8 @@ export const NotificationProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
+  const { isAuthenticated } = useSession();
+  const { updatesessionUserPushToken } = useAuthAPi();
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -78,6 +84,29 @@ export const NotificationProvider: React.FC<PropsWithChildren> = ({
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && expoPushToken) {
+      console.log("----------->", isAuthenticated, expoPushToken);
+
+      updatesessionUserPushToken(expoPushToken)
+        .then((_) =>
+          showSnackbar({
+            kind: "success",
+            title: "Success",
+            subtitle: "Updated push token succesfully",
+          })
+        )
+        .catch((e) => {
+          const error = handleApiErrors<{ expoPushToken: string }>(e);
+          showSnackbar({
+            kind: "error",
+            title: "Error",
+            subtitle: error?.detail ?? error?.expoPushToken,
+          });
+        });
+    }
+  }, [expoPushToken, isAuthenticated, updatesessionUserPushToken]);
 
   return (
     <NotificationContext.Provider
