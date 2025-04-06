@@ -7,6 +7,7 @@ import QRCode from "react-native-qrcode-svg";
 
 const UpcomingNotifications = () => {
   const { error, expoPushToken, notification } = useNotification();
+
   const theme = useTheme();
   if (error)
     return (
@@ -27,13 +28,10 @@ const UpcomingNotifications = () => {
         {JSON.stringify(notification?.request.content.data, null, 2)}
       </Text>
       <QRCode
-        value={JSON.stringify({
-          data: notification?.request.content.data,
-          expoPushToken,
-        })}
-        size={55}
-        backgroundColor={theme.colors.primary}
-        color={"white"}
+        value={expoPushToken ?? "None"}
+        size={100}
+        // backgroundColor={theme.colors.primary}
+        // color={"white"}
       />
     </Box>
   );
