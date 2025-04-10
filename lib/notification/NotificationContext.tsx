@@ -19,6 +19,7 @@ interface NotificationContextType {
   expoPushToken: string | null;
   notification: Notifications.Notification | null;
   error: Error | null;
+  isLoading: boolean;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
@@ -44,15 +45,19 @@ export const NotificationProvider: React.FC<PropsWithChildren> = ({
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null);
   const [error, setError] = useState<Error | null>(null);
+  const [isLoading, setLoading] = useState(false);
 
   const notificationListener = useRef<EventSubscription>();
   const responseListener = useRef<EventSubscription>();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(
-      (token) => setExpoPushToken(token),
-      (error) => setError(error)
-    );
+    setLoading(true);
+    registerForPushNotificationsAsync()
+      .then(
+        (token) => setExpoPushToken(token),
+        (error) => setError(error)
+      )
+      .finally(() => setLoading(false));
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -108,7 +113,7 @@ export const NotificationProvider: React.FC<PropsWithChildren> = ({
 
   return (
     <NotificationContext.Provider
-      value={{ expoPushToken, notification, error }}
+      value={{ expoPushToken, notification, error, isLoading }}
     >
       {children}
     </NotificationContext.Provider>

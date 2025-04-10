@@ -1,7 +1,7 @@
 import { apiFetch, APIFetchResponse, constructUrl, useApi } from "@/lib/api";
 import { NotificationReminder, NotificationReminderFormData } from "../types";
 
-export const useReminders = (params: Record<string, any>) => {
+export const useReminders = (params: Record<string, any>={}) => {
   const url = constructUrl(`/notification-reminders`, params);
   const { data, error, mutate, isLoading } =
     useApi<APIFetchResponse<{ results: Array<NotificationReminder> }>>(url);

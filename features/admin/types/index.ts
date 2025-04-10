@@ -109,7 +109,24 @@ export interface FleetRoute {
   createdAt: string;
   updatedAt: string;
   voided: boolean;
-  isActive:boolean
+  isActive: boolean;
+}
+
+export interface Trip {
+  id: string;
+  fleetId: string;
+  routeId: string;
+  startStageId: string;
+  endStageId: string;
+  createdAt: string;
+  endedAt: string;
+  updatedAt: string;
+  voided: boolean;
+  direction: string;
+  fleet?: Fleet;
+  route?: Route;
+  startStage?: Stage;
+  endStage?: Stage;
 }
 
 export type StageFormData = z.infer<typeof StagesShema>;

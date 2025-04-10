@@ -1,11 +1,22 @@
-import { Box, EmptyState, ErrorState, Text } from "@/components";
+import {
+  Box,
+  EmptyState,
+  ErrorState,
+  ExpoIconComponent,
+  ListTile,
+  ListTileSkeleton,
+  Text,
+  When,
+} from "@/components";
 import { useNotification } from "@/lib/notification";
 import { showModalBottomSheet } from "@/lib/overlays";
 import { useTheme } from "@/lib/theme";
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { NotificationReminderForm } from "../forms";
+import { useReminders } from "../hooks";
+import { useSession } from "@/lib/global-store";
 
 type UpcomingNotificationsProps = {
   fleetNo?: string;
@@ -13,7 +24,21 @@ type UpcomingNotificationsProps = {
 const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
   fleetNo,
 }) => {
-  const { error, expoPushToken, notification } = useNotification();
+  const {
+    error: notificationsError,
+    isLoading: isLoadingNotifications,
+    expoPushToken,
+  } = useNotification();
+  const { user } = useSession();
+  const {
+    error: remindersError,
+    isLoading: isLoadingReminders,
+    reminders,
+  } = useReminders({
+    userId: user?.id,
+    expoPushToken,
+    v: "custom:include(routeStage:include(stage),trip:include(fleet))",
+  });
   const theme = useTheme();
   const handleLaunchForm = () => {
     const dispose = showModalBottomSheet(
@@ -27,10 +52,10 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
       }
     );
   };
-  if (error)
+  if (notificationsError)
     return (
       <ErrorState
-        message={error?.message}
+        message={notificationsError.message}
         detail="Error getting push notification"
       />
     );
@@ -46,11 +71,42 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
           </TouchableOpacity>
         )}
       </Box>
-      <Text color={"success"}>
-        {JSON.stringify(notification?.request.content.data, null, 2)}
-      </Text>
-      <Box flex={1} p={"m"}>
-        <EmptyState message="No reminders" />
+      <Box flex={1} py={"m"} gap={"s"}>
+        <When
+          asyncState={{
+            isLoading: isLoadingNotifications || isLoadingReminders,
+            error: remindersError,
+            data: reminders,
+          }}
+          error={(e) => <ErrorState error={e} />}
+          loading={() => (
+            <>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <ListTileSkeleton key={index} />
+              ))}
+            </>
+          )}
+          success={(data) => {
+            if (!data.length)
+              return <EmptyState message="No upcoming reminders" />;
+            return (
+              <FlatList
+                data={data}
+                keyExtractor={({ id }) => id}
+                renderItem={({ item }) => (
+                  <ListTile
+                    title={item.routeStage?.stage?.name}
+                    subtitle={`${item?.trip?.fleet?.name}`}
+                    leading={
+                      <ExpoIconComponent family="FontAwesome" name="bell-o" />
+                    }
+                    borderBottom
+                  />
+                )}
+              />
+            );
+          }}
+        />
       </Box>
     </Box>
   );
