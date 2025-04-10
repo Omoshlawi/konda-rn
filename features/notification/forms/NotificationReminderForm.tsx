@@ -22,11 +22,13 @@ import Color from "color";
 import { mutate } from "swr";
 import { showSnackbar } from "@/lib/overlays";
 import { handleApiErrors } from "@/lib/api";
+import { useRemindersApi } from "../hooks";
 type Props = {
   fleetNo: string;
   onSuccess?: (notification: NotificationReminder) => void;
 };
 const NotificationReminderForm: React.FC<Props> = ({ fleetNo, onSuccess }) => {
+  const { createReminder } = useRemindersApi();
   const { expoPushToken } = useNotification();
   const form = useForm<NotificationReminderFormData>({
     defaultValues: {
@@ -52,8 +54,9 @@ const NotificationReminderForm: React.FC<Props> = ({ fleetNo, onSuccess }) => {
     data
   ) => {
     try {
-      //   onSuccess?.(res);
-      //   mutate("/fleet");
+      const res = await createReminder(data);
+      onSuccess?.(res);
+      mutate("/notification-reminders");
       showSnackbar({
         title: "success",
         subtitle: `Reminder added succesfully`,
