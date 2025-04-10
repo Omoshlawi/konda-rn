@@ -108,12 +108,7 @@ const Routestages: FC<Props> = ({ route }) => {
         </Box>
       )}
       success={(routestages) => {
-        if (!routestages.length)
-          return (
-            <Box height={400}>
-              <EmptyState message="No stages" />
-            </Box>
-          );
+        if (!routestages.length) return <EmptyState message="No stages" />;
         return (
           <Box mt={"m"} gap={"s"}>
             <Text fontWeight={"700"} color={"text"}>

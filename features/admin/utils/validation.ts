@@ -43,22 +43,30 @@ export const StagesShema = z.object({
 
 export const RouteStageschema = z.object({
   routeId: z.string().min(1, "Required").uuid(),
-  order: z
-    .number({ coerce: true })
-    .int(),
+  order: z.number({ coerce: true }).int(),
   stageId: z.string().min(1, "Required").uuid(),
 });
 
-export const RoutePricingSchema = z.object({
+export const FleetRouteSchema = z.object({
   routeId: z.string().min(1, "Required").uuid(),
+});
+
+export const RoutePricingSchema = z.object({
   fromStageId: z.string().min(1, "Required").uuid(),
   toStageId: z.string().min(1, "Required").uuid(),
   price: z.number().positive("Must be a positive number"),
   timeStart: z.string().min(1, "Required"),
+  activeDays: z
+    .enum([
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ])
+    .array()
+    .nonempty("You must rovide atleast one day of the week"),
   timeEnd: z.string().min(1, "Required"),
-});
-
-
-export const FleetRouteSchema = z.object({
-  routeId: z.string().min(1, "Required").uuid(),
 });

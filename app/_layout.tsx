@@ -39,10 +39,10 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <ApiConfigProvider>
-        <OverlayPortal>
-          {/* SHOULE BE INSIDE OVERLAY PORTAL TO ALLOW ACCESS AND USE OF SNACK BAR,MODALS,ETC FOR ERROR HANDLING OR INFORMATION DISPLAY IF ERROR OCCURED */}
-          <NotificationProvider>
+      <NotificationProvider>
+        <ApiConfigProvider>
+          <OverlayPortal>
+            {/* SHOULE BE INSIDE OVERLAY PORTAL TO ALLOW ACCESS AND USE OF SNACK BAR,MODALS,ETC FOR ERROR HANDLING OR INFORMATION DISPLAY IF ERROR OCCURED */}
             <StatusBar style={theme == "dark" ? "light" : "dark"} />
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(drawer)" />
@@ -52,9 +52,9 @@ export default function RootLayout() {
               <Stack.Screen name="(authentication)" />
               <Stack.Screen name="+not-found" />
             </Stack>
-          </NotificationProvider>
-        </OverlayPortal>
-      </ApiConfigProvider>
+          </OverlayPortal>
+        </ApiConfigProvider>
+      </NotificationProvider>
     </ThemeProvider>
   );
 }

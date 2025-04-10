@@ -1,14 +1,32 @@
-import { Box, ErrorState, Text } from "@/components";
+import { Box, EmptyState, ErrorState, Text } from "@/components";
 import { useNotification } from "@/lib/notification";
+import { showModalBottomSheet } from "@/lib/overlays";
 import { useTheme } from "@/lib/theme";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import QRCode from "react-native-qrcode-svg";
+import { NotificationReminderForm } from "../forms";
 
-const UpcomingNotifications = () => {
+type UpcomingNotificationsProps = {
+  fleetNo?: string;
+};
+const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
+  fleetNo,
+}) => {
   const { error, expoPushToken, notification } = useNotification();
-
   const theme = useTheme();
+  const handleLaunchForm = () => {
+    const dispose = showModalBottomSheet(
+      <NotificationReminderForm
+        fleetNo={fleetNo!}
+        onSuccess={() => dispose()}
+      />,
+      {
+        title: "Add reminder",
+        height: "60%",
+      }
+    );
+  };
   if (error)
     return (
       <ErrorState
@@ -22,19 +40,18 @@ const UpcomingNotifications = () => {
         <Text fontWeight={"700"} color={"text"}>
           Upcoming Notifications
         </Text>
-        <TouchableOpacity activeOpacity={0.5}>
-          <Text color={"primary"}>Schedule Reminder</Text>
-        </TouchableOpacity>
+        {fleetNo && (
+          <TouchableOpacity activeOpacity={0.5} onPress={handleLaunchForm}>
+            <Text color={"primary"}>Add Reminder</Text>
+          </TouchableOpacity>
+        )}
       </Box>
       <Text color={"success"}>
         {JSON.stringify(notification?.request.content.data, null, 2)}
       </Text>
-      <QRCode
-        value={expoPushToken ?? "None"}
-        size={100}
-        // backgroundColor={theme.colors.primary}
-        // color={"white"}
-      />
+      <Box flex={1} p={"m"}>
+        <EmptyState message="No reminders" />
+      </Box>
     </Box>
   );
 };

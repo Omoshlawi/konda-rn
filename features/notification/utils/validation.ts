@@ -18,3 +18,9 @@ export const GPSSensorDataSchema = z.object({
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
 });
+
+export const NotificationReminderSchema = z.object({
+  routeStageId: z.string().uuid("Invalid routes stage or not provided"),
+  expoPushToken: z.string().optional(),
+  fleetNo: z.string().nonempty("Required"),
+});

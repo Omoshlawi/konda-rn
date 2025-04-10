@@ -2,6 +2,7 @@ import { BASE_URL, websocketBaseUrl } from "@/constants";
 import { showSnackbar } from "@/lib/overlays";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { FleetRouteInterStageMovement } from "../types";
 
 const useFleetInterstageMovementStream = (fleetNo?: string) => {
   const [connected, setConnected] = useState(false);
@@ -76,21 +77,13 @@ const useFleetInterstageMovementStream = (fleetNo?: string) => {
     });
 
     // Data stream handler
-    socketInstance.on(
-      "stream_movement",
-      (
-        routeId,
-        routeName,
-        currStageId,
-        currStageName,
-        nextStageId,
-        nextStageName
-      ) => {
-        steCurrentRoute({ id: routeId, name: routeName });
-        setCurrentLocation({ id: currStageId, name: currStageName });
-        setNextLocation({ id: nextStageId, name: nextStageName });
-      }
-    );
+    socketInstance.on("stream_movement", (payload) => {
+      const data: FleetRouteInterStageMovement = JSON.parse(payload);
+      steCurrentRoute({ id: data.routeId, name: data.routeName });
+      setCurrentLocation({ id: data.currentStageId, name: data.currentStage });
+      if (data.nextStageId && data.nextStage)
+        setNextLocation({ id: data.nextStageId, name: data.nextStage });
+    });
 
     // Cleanup function
     return () => {

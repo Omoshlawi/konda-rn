@@ -14,6 +14,7 @@ import QRCode from "react-native-qrcode-svg";
 import { useFleetInterstageMovementStream } from "../hooks";
 import { RoutePaths } from "../utils/constants";
 import SearchTrip from "./SearchTrip";
+import { UpcomingNotifications } from "@/features/notification/widgets";
 
 const TripSummarycard = () => {
   const theme = useTheme();
@@ -22,7 +23,7 @@ const TripSummarycard = () => {
   const { connected, currentRoute, currentStage, nextStage, socketRef } =
     useFleetInterstageMovementStream(fleetNo);
   return (
-    <Box gap={"s"} mt={"m"}>
+    <Box gap={"s"} mt={"m"} px={"l"} flex={1}>
       <SearchTrip fleetNo={fleetNo} onChangeFleetNo={setFleetNo} />
       <Box
         borderRadius={"large"}
@@ -139,6 +140,7 @@ const TripSummarycard = () => {
           </Text>
         </Box>
       </Box>
+      <UpcomingNotifications fleetNo={fleetNo?.toUpperCase()} />
     </Box>
   );
 };

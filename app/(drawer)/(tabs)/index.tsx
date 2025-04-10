@@ -58,10 +58,7 @@ export default function HomeScreen() {
           {new Date().toDateString()}
         </Text>
       </Box>
-      <Box px={"l"} flex={1} gap={"m"}>
-        <TripSummaryCard />
-        <UpcomingNotifications />
-      </Box>
+      <TripSummaryCard />
     </ThemedPageLayout>
   );
 }

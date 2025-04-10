@@ -87,8 +87,6 @@ export const NotificationProvider: React.FC<PropsWithChildren> = ({
 
   useEffect(() => {
     if (isAuthenticated && expoPushToken) {
-      console.log("----------->", isAuthenticated, expoPushToken);
-
       updatesessionUserPushToken(expoPushToken)
         .then((_) =>
           showSnackbar({
