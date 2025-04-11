@@ -37,6 +37,7 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
   } = useReminders({
     userId: user?.id,
     expoPushToken,
+    isSent: "false",
     v: "custom:include(routeStage:include(stage),trip:include(fleet))",
   });
   const theme = useTheme();
@@ -63,7 +64,7 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
     <Box flex={1} backgroundColor={"background"}>
       <Box flexDirection={"row"} justifyContent={"space-between"} pr={"s"}>
         <Text fontWeight={"700"} color={"text"}>
-          Upcoming Notifications
+          Upcoming Notification Reminders
         </Text>
         {fleetNo && (
           <TouchableOpacity activeOpacity={0.5} onPress={handleLaunchForm}>
@@ -87,12 +88,13 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
             </>
           )}
           success={(data) => {
-            if (!data.length)
-              return <EmptyState message="No upcoming reminders" />;
             return (
               <FlatList
                 data={data}
                 keyExtractor={({ id }) => id}
+                ListEmptyComponent={
+                  <EmptyState message="No upcoming reminders" />
+                }
                 renderItem={({ item }) => (
                   <ListTile
                     title={item.routeStage?.stage?.name}

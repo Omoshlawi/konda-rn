@@ -1,28 +1,29 @@
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
-import React, { useEffect } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { NotificationReminder, NotificationReminderFormData } from "../types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { NotificationReminderSchema } from "../utils/validation";
-import { useNotification } from "@/lib/notification";
 import {
   Box,
+  Button,
   EmptyState,
   ErrorState,
-  ListTileSkeleton,
-  When,
-  Text,
-  ListTile,
   ExpoIconComponent,
-  Button,
+  ListTile,
+  ListTileSkeleton,
+  Text,
+  When,
 } from "@/components";
 import { useFleetRoutes, useFleets } from "@/features/admin/hooks";
-import { useTheme } from "@/lib/theme";
-import Color from "color";
-import { mutate } from "swr";
-import { showSnackbar } from "@/lib/overlays";
 import { handleApiErrors } from "@/lib/api";
+import { useNotification } from "@/lib/notification";
+import { showSnackbar } from "@/lib/overlays";
+import { useTheme } from "@/lib/theme";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Color from "color";
+import React, { useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { FlatList, StyleSheet } from "react-native";
+import { mutate } from "swr";
 import { useRemindersApi } from "../hooks";
+import { NotificationReminder, NotificationReminderFormData } from "../types";
+import { NotificationReminderSchema } from "../utils/validation";
+import { useFleetInterstageMovementStream } from "@/features/trip/hooks";
 type Props = {
   fleetNo: string;
   onSuccess?: (notification: NotificationReminder) => void;
@@ -49,7 +50,7 @@ const NotificationReminderForm: React.FC<Props> = ({ fleetNo, onSuccess }) => {
   });
   const theme = useTheme();
   const observableRouteStage = form.watch("routeStageId");
-
+  const { currentFleetMovementState } = useFleetInterstageMovementStream();
   const onSubmit: SubmitHandler<NotificationReminderFormData> = async (
     data
   ) => {
@@ -80,7 +81,7 @@ const NotificationReminderForm: React.FC<Props> = ({ fleetNo, onSuccess }) => {
   }, [expoPushToken, form]);
 
   useEffect(() => {
-    const err = Object.keys(form.formState.errors).forEach((field) => {
+    Object.keys(form.formState.errors).forEach((field) => {
       const message =
         form.formState.errors[field as keyof NotificationReminderFormData]
           ?.message;

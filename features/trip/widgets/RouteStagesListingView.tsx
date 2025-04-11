@@ -29,7 +29,7 @@ const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
     includeOnlyActiveFleetRoutes: "true",
     v: "custom:include(fleet,route:include(stages:include(stage:include(county,subCounty))))",
   });
-  const { connected, currentStage, nextStage, currentRoute, socketRef } =
+  const { connected, currentFleetMovementState, socketRef } =
     useFleetInterstageMovementStream(fleetNo);
   const theme = useTheme();
   return (
@@ -86,7 +86,8 @@ const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
                   color={"hintColor"}
                 >
                   {fleetNo}
-                  {currentRoute?.name && `(${currentStage?.name})`}
+                  {currentFleetMovementState?.routeName &&
+                    `(${currentFleetMovementState.currentStage})`}
                 </Text>
               </Box>
               <FlatList
@@ -96,7 +97,8 @@ const RouteStagesListingView: FC<Props> = ({ fleetNo }) => {
                   <ListTile
                     containerStyles={{
                       backgroundColor:
-                        currentStage?.id === item.stageId
+                        currentFleetMovementState?.currentStageId ===
+                        item.stageId
                           ? theme.colors.primary
                           : undefined,
                     }}

@@ -6,20 +6,8 @@ import { FleetRouteInterStageMovement } from "../types";
 
 const useFleetInterstageMovementStream = (fleetNo?: string) => {
   const [connected, setConnected] = useState(false);
-
+  const [state, setState] = useState<FleetRouteInterStageMovement>();
   const socketRef = useRef<Socket | null>(null);
-  const [currentLocation, setCurrentLocation] = useState<{
-    id: string;
-    name: string;
-  }>();
-  const [nextLocation, setNextLocation] = useState<{
-    id: string;
-    name: string;
-  }>();
-  const [currentRoute, steCurrentRoute] = useState<{
-    id: string;
-    name: string;
-  }>();
   useEffect(() => {
     // Only attempt connection if fleetNo exists
     if (!fleetNo) return;
@@ -79,10 +67,7 @@ const useFleetInterstageMovementStream = (fleetNo?: string) => {
     // Data stream handler
     socketInstance.on("stream_movement", (payload) => {
       const data: FleetRouteInterStageMovement = JSON.parse(payload);
-      steCurrentRoute({ id: data.routeId, name: data.routeName });
-      setCurrentLocation({ id: data.currentStageId, name: data.currentStage });
-      if (data.nextStageId && data.nextStage)
-        setNextLocation({ id: data.nextStageId, name: data.nextStage });
+      setState(data);
     });
 
     // Cleanup function
@@ -97,9 +82,7 @@ const useFleetInterstageMovementStream = (fleetNo?: string) => {
   return {
     socketRef,
     connected,
-    currentStage: currentLocation,
-    nextStage: nextLocation,
-    currentRoute,
+    currentFleetMovementState: state,
   };
 };
 

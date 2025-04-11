@@ -20,7 +20,7 @@ const TripSummarycard = () => {
   const theme = useTheme();
   const [fleetNo, setFleetNo] = useState<string>();
   const router = useRouter();
-  const { connected, currentRoute, currentStage, nextStage, socketRef } =
+  const { connected, currentFleetMovementState, socketRef } =
     useFleetInterstageMovementStream(fleetNo);
   return (
     <Box gap={"s"} mt={"m"} px={"l"} flex={1}>
@@ -44,14 +44,14 @@ const TripSummarycard = () => {
             fontWeight={"700"}
             variant={"titleLarge"}
           >
-            Current stage: {currentStage?.name ?? "-"}
+            Current stage: {currentFleetMovementState?.currentStage ?? "-"}
           </Text>
           <Text
             fontWeight={"700"}
             variant={"bodySmall"}
             style={{ color: Color("white").alpha(0.6).toString() }}
           >
-            Route: {currentRoute?.name ?? "-"}
+            Route: {currentFleetMovementState?.routeName ?? "-"}
           </Text>
         </Box>
         <QRCode
@@ -74,7 +74,7 @@ const TripSummarycard = () => {
             fontWeight={"700"}
             variant={"bodyLarge"}
           >
-            Next Stage: {nextStage?.name ?? "-"}
+            Next Stage: {currentFleetMovementState?.nextStage ?? "-"}
           </Text>
         </Box>
         <Button
