@@ -10,7 +10,7 @@ import {
 } from "@/components";
 
 import { useSession } from "@/lib/global-store";
-import { ThemeTogglerSection } from "../widgets";
+import { NotificationSection, ThemeTogglerSection } from "../widgets";
 import { LogoutSection } from "@/features/auth/widgets";
 
 export const SettingsScreen = () => {
@@ -45,32 +45,7 @@ export const SettingsScreen = () => {
               }
             />
           </SectionCard>
-          <SectionCard title="Notifications">
-            <ListTile
-              title={"Notification settings"}
-              subtitle={"default"}
-              leading={
-                <ExpoIconComponent
-                  family="MaterialCommunityIcons"
-                  name="bell"
-                />
-              }
-              onPress={() => {
-                if (Platform.OS === "android") {
-                  Linking.openSettings(); // Opens app-specific settings
-                } else {
-                  // For iOS, there's no direct way to open notification sound settings
-                  Linking.openURL("app-settings:");
-                }
-              }}
-              trailing={
-                <ExpoIconComponent
-                  family="MaterialCommunityIcons"
-                  name="chevron-right"
-                />
-              }
-            />
-          </SectionCard>
+          <NotificationSection/>
           <ThemeTogglerSection />
           <LogoutSection />
         </Box>
