@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { Linking, Platform, ScrollView, StyleSheet } from "react-native";
 
 import {
   AppBar,
@@ -37,6 +37,32 @@ export const SettingsScreen = () => {
               title="Change password"
               leading={<ExpoIconComponent family="Feather" name="key" />}
               subtitle="Use string secure password"
+              trailing={
+                <ExpoIconComponent
+                  family="MaterialCommunityIcons"
+                  name="chevron-right"
+                />
+              }
+            />
+          </SectionCard>
+          <SectionCard title="Notifications">
+            <ListTile
+              title={"Notification settings"}
+              subtitle={"default"}
+              leading={
+                <ExpoIconComponent
+                  family="MaterialCommunityIcons"
+                  name="bell"
+                />
+              }
+              onPress={() => {
+                if (Platform.OS === "android") {
+                  Linking.openSettings(); // Opens app-specific settings
+                } else {
+                  // For iOS, there's no direct way to open notification sound settings
+                  Linking.openURL("app-settings:");
+                }
+              }}
               trailing={
                 <ExpoIconComponent
                   family="MaterialCommunityIcons"
