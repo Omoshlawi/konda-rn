@@ -17,6 +17,7 @@ import QRCode from "react-native-qrcode-svg";
 import { NotificationReminderForm } from "../forms";
 import { useReminders } from "../hooks";
 import { useSession } from "@/lib/global-store";
+import { useFleetInterstageMovementStream } from "@/features/trip/hooks";
 
 type UpcomingNotificationsProps = {
   fleetNo?: string;
@@ -41,11 +42,14 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
     v: "custom:include(routeStage:include(stage),trip:include(fleet))",
   });
   const theme = useTheme();
+  const { currentFleetMovementState } =
+    useFleetInterstageMovementStream(fleetNo);
   const handleLaunchForm = () => {
     const dispose = showModalBottomSheet(
       <NotificationReminderForm
         fleetNo={fleetNo!}
         onSuccess={() => dispose()}
+        lastKnownTripInfo={currentFleetMovementState!}
       />,
       {
         title: "Add reminder",
@@ -53,6 +57,7 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
       }
     );
   };
+
   if (notificationsError)
     return (
       <ErrorState
@@ -66,7 +71,7 @@ const UpcomingNotifications: React.FC<UpcomingNotificationsProps> = ({
         <Text fontWeight={"700"} color={"text"}>
           Upcoming Notification Reminders
         </Text>
-        {fleetNo && (
+        {fleetNo && currentFleetMovementState && (
           <TouchableOpacity activeOpacity={0.5} onPress={handleLaunchForm}>
             <Text color={"primary"}>Add Reminder</Text>
           </TouchableOpacity>
