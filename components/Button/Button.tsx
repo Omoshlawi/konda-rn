@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextStyle,
   TouchableHighlight,
+  View,
   ViewStyle,
 } from "react-native";
 import Text from "../Text";
@@ -87,7 +88,7 @@ const Button: FC<StyledButtonProps> = ({
       {loading ? (
         <ActivityIndicator color={colors.color} />
       ) : (
-        <>
+        <View style={{ flexDirection: iconLeading ? "row" : "row-reverse", alignItems: "center", gap: theme.spacing.s }}>
           {typeof renderIcon === "function" &&
             renderIcon({ color: colors.color, size: 18 })}
           <Text
@@ -98,7 +99,7 @@ const Button: FC<StyledButtonProps> = ({
           >
             {title}
           </Text>
-        </>
+        </View>
       )}
     </TouchableHighlight>
   );

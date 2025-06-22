@@ -47,8 +47,8 @@ export const NotificationProvider: React.FC<PropsWithChildren> = ({
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setLoading] = useState(false);
 
-  const notificationListener = useRef<EventSubscription>();
-  const responseListener = useRef<EventSubscription>();
+  const notificationListener = useRef<EventSubscription>(null);
+  const responseListener = useRef<EventSubscription>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -80,12 +80,10 @@ export const NotificationProvider: React.FC<PropsWithChildren> = ({
 
     return () => {
       if (notificationListener.current) {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
+        notificationListener.current?.remove?.();
       }
       if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current);
+        responseListener.current?.remove?.();
       }
     };
   }, []);
